@@ -7,7 +7,7 @@ public class Bird {
     private final float ACCELERATION = .7f;
     private float vertical_velocity = 0f;
     private float terminal_velocity = 15f;
-    private float jump_force = 26f;
+    private float jump_force = 27f;
     private float rotation_angle = 0f;
     private float max_rotation_angle;
     private Trace trace_head = new Trace(new PVector());
