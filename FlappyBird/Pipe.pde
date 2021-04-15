@@ -26,8 +26,6 @@ public class Pipe {
     public void update() {
         display();
         move();
-        //respawn();
-        // increaseSpeed();
     }
 
     public PVector getPosition() {
