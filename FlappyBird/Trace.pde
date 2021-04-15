@@ -21,7 +21,7 @@ public class Trace {
     }
 
     public void move() {
-        position.x -= pipes.get(0).getHorizontalVelocity();
+        position.x -= pipes.getHorizontalVelocity();
     }
 
     public void unreference(Trace obj) {

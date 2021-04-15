@@ -10,7 +10,7 @@ Scene customizeBirdScene = new Scene();
 Scene customizePipeScene = new Scene();
 
 Bird bird;
-List<Pipe> pipes;
+Pipes pipes;
 UI ui;
 
 void setup() 
@@ -21,13 +21,8 @@ void setup()
     surface.setTitle("Saggy Bird");
 
     bird = new Bird(new PVector(width/2 - 300, 300));
-    pipes = new LinkedList<Pipe>();
+    pipes = new Pipes();
     ui = new UI();
-
-    pipes.add(new Pipe(new PVector(width, 0)));
-    for (int i=1; i<pipes.get(0).number_of_pipes; i++) {
-        pipes.add(new Pipe(new PVector((width) + (Pipe.distance_between_pipes * i), 0)));
-    }
     
 }
 
@@ -35,13 +30,11 @@ void draw()
 {
     background(100);
 
-    for (Pipe pipe : pipes) {
-        pipe.update();
-    }
+    pipes.update();
 
     bird.update();
 
     ui.displayScore();
 
-    println(frameRate + " fps");
+    //println(frameRate + " fps");
 }

@@ -4,13 +4,13 @@ public class Pipe {
     private PVector position;
     private PVector spacing_position;
 
-    public static final int distance_between_pipes = 550;
-    private int number_of_pipes = width / distance_between_pipes + 1;
+    //public static final int distance_between_pipes = 550;
+    public static final float WIDTH = 120f;
 
+    //private int number_of_pipes = width / distance_between_pipes + 1;
     private float horizontal_velocity = 6f; 
     private float max_horizontal_velocity = horizontal_velocity + 1f;
-    private float spacing_height = 250f;
-    public static final float WIDTH = 120f;
+    private float spacing_height = 300f;
     private float upper_height;
     private float lower_height;
 
@@ -25,7 +25,7 @@ public class Pipe {
     public void update() {
         display();
         move();
-        respawn();
+        //respawn();
         // increaseSpeed();
     }
 
@@ -61,20 +61,23 @@ public class Pipe {
         position.x -= horizontal_velocity;
     }
 
-    public void respawn() {
-        if (position.x + WIDTH <= 0) {
-            position.x += number_of_pipes * distance_between_pipes;
-            spacing_position.y = random(100, height - spacing_height - 100);
-            upper_height = spacing_position.y;
-            lower_height = height - (spacing_position.y + spacing_height);
-        }
+    // public void respawn() {
+    //     if (position.x + WIDTH <= 0) {
+    //         position.x += number_of_pipes * distance_between_pipes;
+    //         spacing_position.y = random(100, height - spacing_height - 100);
+    //         upper_height = spacing_position.y;
+    //         lower_height = height - (spacing_position.y + spacing_height);
+    //     }
+    // }
+
+    public boolean checkIndividualCollision(PVector birdPosition){
+         boolean isInPipe = birdPosition.x + Bird.WIDTH >= position.x && birdPosition.x <= position.x + Pipe.WIDTH;
+         boolean isNotInHole = birdPosition.y <= spacing_position.y || birdPosition.y + Bird.WIDTH >= spacing_position.y + spacing_height;
+         return isInPipe && isNotInHole;
     }
 
     public void increaseSpeed() {
-        println(horizontal_velocity);
-        if (ui.score % 5 == 0) { // !!!
-            horizontal_velocity += .1f;
-        }
+        horizontal_velocity += .1f;
         if (horizontal_velocity >= max_horizontal_velocity) {
             horizontal_velocity = max_horizontal_velocity;
         }
