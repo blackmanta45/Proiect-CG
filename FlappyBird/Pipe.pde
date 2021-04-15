@@ -1,26 +1,29 @@
 public class Pipe {
 
-    private PImage img;
     private PVector position;
-    private PVector spacing_position;
+    private float horizontal_velocity;
 
-    //public static final int distance_between_pipes = 550;
+    private PImage img;
+    private PVector hole_position;
+
     public static final float WIDTH = 120f;
 
-    //private int number_of_pipes = width / distance_between_pipes + 1;
-    private float horizontal_velocity = 6f; 
-    private float max_horizontal_velocity = horizontal_velocity + 1f;
-    private float spacing_height = random(250,350);
-    private float upper_height;
-    private float lower_height;
+    private float hole_size;
+    private float upper_pipe_size;
+    private float lower_pipe_size;
 
     public Pipe(PVector position, float horizontal_velocity) {
         this.position = position;
         this.horizontal_velocity = horizontal_velocity;
-        spacing_position = new PVector();
-        spacing_position.y = random(100, height - spacing_height - 100);
-        upper_height = spacing_position.y;
-        lower_height = height - (spacing_position.y + spacing_height);
+        init();
+    }
+
+    public void init() {
+        hole_position = new PVector();
+        hole_size = random(250, 350);
+        hole_position.y = random(100, height - hole_size - 100);
+        upper_pipe_size = hole_position.y;
+        lower_pipe_size = height - (hole_position.y + hole_size);
     }
 
     public void update() {
@@ -33,11 +36,11 @@ public class Pipe {
     }
 
     public PVector getSpacingPosition() {
-        return spacing_position;
+        return hole_position;
     }
 
     public float getSpacingHeight() {
-        return spacing_height;
+        return hole_size;
     }
 
     public void setHorizontalVelocity(float horizontal_velocity) {
@@ -52,26 +55,17 @@ public class Pipe {
         fill(#00FF00);
         stroke(0);
         strokeWeight(4);
-        rect(position.x, 0, WIDTH, upper_height);
-        rect(position.x, spacing_position.y + spacing_height, WIDTH, lower_height);
+        rect(position.x, 0, WIDTH, upper_pipe_size);
+        rect(position.x, hole_position.y + hole_size, WIDTH, lower_pipe_size);
     }
 
     public void move() {
         position.x -= horizontal_velocity;
     }
 
-    // public void respawn() {
-    //     if (position.x + WIDTH <= 0) {
-    //         position.x += number_of_pipes * distance_between_pipes;
-    //         spacing_position.y = random(100, height - spacing_height - 100);
-    //         upper_height = spacing_position.y;
-    //         lower_height = height - (spacing_position.y + spacing_height);
-    //     }
-    // }
-
     public boolean checkIndividualCollision(PVector birdPosition){
          boolean isInPipe = birdPosition.x + Bird.WIDTH >= position.x && birdPosition.x <= position.x + Pipe.WIDTH;
-         boolean isNotInHole = birdPosition.y <= spacing_position.y || birdPosition.y + Bird.WIDTH >= spacing_position.y + spacing_height;
+         boolean isNotInHole = birdPosition.y <= hole_position.y || birdPosition.y + Bird.WIDTH >= hole_position.y + hole_size;
          return isInPipe && isNotInHole;
     }
 

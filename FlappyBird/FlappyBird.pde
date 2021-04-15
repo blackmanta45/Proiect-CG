@@ -20,8 +20,12 @@ void setup()
     frameRate(60);
     surface.setTitle("Saggy Bird");
 
+    float horizontal_velocity = 6f;
+    float max_horizontal_velocity = 8f;  
+    float increment_horizontal_velocity = .2f ;
+
     bird = new Bird(new PVector(width/2 - 300, 300));
-    pipes = new Pipes();
+    pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity);
     ui = new UI();
     
 }

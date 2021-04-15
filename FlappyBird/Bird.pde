@@ -1,38 +1,56 @@
 public class Bird {
     
-    private PImage img = loadImage("../Images/bird_default.png");
     private PVector position;
+    
+    private PImage img;
+
+    private PVector score_node;
     
     private static final float WIDTH = 70f;
     private final float ACCELERATION =.7f;
-    private float vertical_velocity = 0f;
-    private float terminal_velocity = 15f;
-    private float jump_force = 27f;
-    private float rotation_angle = 0f;
+
+    private float vertical_velocity;
+    private float terminal_velocity;
+    private float jump_force;
+    private float rotation_angle;
     private float max_rotation_angle;
-    private Trace trace_head = new Trace(new PVector());
-    private List<Trace> trace_list = new LinkedList<Trace>();
-    public PVector score_node = new PVector(width + Pipe.WIDTH, height / 2);
+
+    private Trace trace;
     
-    private boolean is_dead = false;
-    private boolean is_jumping = false;
-    private boolean is_inside_pipe = false;
+    private boolean is_dead;
+    private boolean is_jumping;
+    private boolean is_inside_pipe;
     
     public Bird(PVector position) {
         this.position = position;
+        init();
     }
     
+    public void init() {
+        img = loadImage("../Images/bird_default.png");
+        vertical_velocity = 0f;
+        terminal_velocity = 15f;
+        jump_force = 27f;
+        rotation_angle = 0f;
+        trace = new Trace(.1f);
+        score_node = new PVector(width + Pipe.WIDTH, height / 2);
+
+        is_dead = false;
+        is_jumping = false;
+        is_inside_pipe = false;
+    }
+
     public void update() {
         die();
+        traceUpdate();
         display();
         rotation();
         fall();
         jump();
-        showTrace();
         score();
         checkCollision();
     }
-    
+
     public PVector getPosition() {
         return position;
     }
@@ -41,10 +59,6 @@ public class Bird {
         pushMatrix();
         translate(position.x + WIDTH / 2, position.y + WIDTH / 2);
         rotate(radians(rotation_angle));
-        // noFill();
-        // stroke(#FF0000);
-        // strokeWeight(1);
-        // rect(-35, -35, 70, 70);
         image(img, - WIDTH / 2 - 10, - WIDTH / 2 - 10, WIDTH + 20, WIDTH + 20); //Drawing the bird's image
         popMatrix();
     }
@@ -93,55 +107,26 @@ public class Bird {
     }
 
     public void checkCollision() {
-        // for (Pipe pipe : pipes) {
-        //     if (position.x + WIDTH >= pipe.getPosition().x && position.x <= pipe.getPosition().x + Pipe.WIDTH) {
-        //         if (position.y <= pipe.getSpacingPosition().y || position.y + WIDTH >= pipe.getSpacingPosition().y + pipe.getSpacingHeight()) {
-        //             for (Pipe pipE : pipes) {
-        //                 pipE.setHorizontalVelocity(0f);
-        //             }
-        //             is_dead = true;
-        //         }
-        //     }
-        // }
-        // if (is_dead && position.y >= height + 100) {
-        //     // noLoop(); // Stops Program
-        //     exit(); // Exits Program
-        // }
         if(is_dead == false)
             is_dead = pipes.checkCollision(position);
     }
     
     public void score() {
-        // rect(score_node.x, score_node.y, 10, 10);
+        rect(score_node.x, score_node.y, 10, 10);
         if (position.x >= score_node.x) {
             ui.score++;
             if(ui.score % 5 == 0){
                 pipes.updatePipesSpeed();
-                //pipes.updatePipesDistance();
             }
             score_node.x += pipes.getDistanceBetweenPipes();
         }
-        score_node.x -= pipes.getHorizontalVelocity();
+        if (is_dead == false) {
+            score_node.x -= pipes.getHorizontalVelocity();
+        }
     }
     
-    public void showTrace() {
-        trace_head.position = new PVector(position.x - 5, position.y + WIDTH / 2);
-        if (trace_list.size() >= 1) {
-            if (dist(trace_head.position.x, trace_head.position.y, trace_list.get(trace_list.size() - 1).position.x, trace_list.get(trace_list.size() - 1).position.y) >= Trace.spacing) {
-                trace_list.add(new Trace(new PVector(trace_head.position.x, trace_head.position.y)));
-            }
-        }
-        else {
-            trace_list.add(new Trace(new PVector(trace_head.position.x, trace_head.position.y)));
-        }
-        for (Trace trace : trace_list) {
-            trace.display();
-            if (is_dead == false) { 
-                trace.move();
-            }
-            // trace.unreference(trace);
-        }
-        // println(trace_list.get(0));
+    public void traceUpdate() {
+        trace.addPoint(new PVector(position.x + WIDTH/2, position.y + WIDTH/2));
+        trace.update();
     }
-    
 }

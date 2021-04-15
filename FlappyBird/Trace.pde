@@ -1,32 +1,52 @@
+import java.util.ArrayList;
+
 public class Trace {
 
-    private PVector position;
-    private float radius = 15f;
-    public static final float spacing = 20f;
-    private float time = 0f;
+    private float spacing;
 
-    public Trace(PVector position) {
-        this.position = position;
+    private PVector lastPoint;
+    private ArrayList<TracePoint> traceList;
+
+    public Trace (float spacing) {
+        this.spacing = spacing;
+        init();
     }
 
-    public void display() {
-        time = (time % 1000) + 4f;
-        fill(#FFFFFF, 255 - time);
-        noStroke();
-        ellipse(position.x, position.y, radius, radius);
-        radius -= .1f;
-        if (radius <= 0f) {
-            radius = 0f;
+    public void init() {
+        traceList = new ArrayList<TracePoint>();
+    }
+
+    public void update() {
+        checkFirstElement();
+        for (TracePoint point : traceList) {
+            if (bird.is_dead == false) {
+                point.move();
+            }
+            point.display();
+        }
+        lastPoint = traceList.get(traceList.size() - 1).getPosition();
+    }
+
+    public void addPoint(PVector pointPosition) {
+        if (verify(pointPosition) == true) {
+            TracePoint point = new TracePoint(lastPoint, pointPosition);
+            traceList.add(point);
         }
     }
 
-    public void move() {
-        position.x -= pipes.getHorizontalVelocity();
+    public boolean verify(PVector pointPosition) {
+        float distance;
+        if (traceList.size() >= 1) {
+            distance = dist(lastPoint.x, lastPoint.y, pointPosition.x, pointPosition.y);
+            return distance >= spacing;
+        }
+        lastPoint = pointPosition;
+        return true;    
     }
 
-    public void unreference(Trace obj) {
-        if (obj.position.x <= 0) {
-            obj = null;
+    public void checkFirstElement() {
+        if (traceList.get(0).needsDeletion() == true) {
+            traceList.remove(0);
         }
     }
 }
