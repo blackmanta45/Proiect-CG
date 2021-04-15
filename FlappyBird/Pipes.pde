@@ -7,13 +7,13 @@ public class Pipes{
     private float max_horizontal_velocity;
     private float increment_horizontal_velocity;
     
-    private List<Pipe> pipesList;
+    private List<Pipe> pipes_list;
     
     private int number_of_pipes;
     private int current_number_of_pipes;
     
     private float distance_between_pipes;
-    private float pipeWidth;
+    private float pipe_width;
     
     public Pipes(float horizontal_velocity, float max_horizontal_velocity, float increment_horizontal_velocity) {
         this.horizontal_velocity = horizontal_velocity;
@@ -25,10 +25,10 @@ public class Pipes{
     public void init() {
         this.distance_between_pipes = 600f;
         this.number_of_pipes = Math.round(width / distance_between_pipes) + 1;
-        this.pipesList = new ArrayList<Pipe>();
+        this.pipes_list = new ArrayList<Pipe>();
         this.current_number_of_pipes = 0;
         addNewPipe();
-        this.pipeWidth = pipesList.get(0).getPipeWidth();
+        this.pipe_width = pipes_list.get(0).getPipeWidth();
     }
     
     public void update() {
@@ -38,21 +38,41 @@ public class Pipes{
     }
     
     public void updateAllPipes() {
-        for (Pipe pipe : pipesList) {
+        float new_speed = horizontal_velocity * delta;
+        //println(new_speed);
+        for (Pipe pipe : pipes_list) {
+            if (bird.isDead() == false)
+                pipe.updateSpeed(new_speed);
             pipe.update();
         }
     }
     
-    public boolean isInAnyPipe(PVector birdPosition) {
-        for (Pipe pipe : pipesList) {
-            if (pipe.isInPipe(birdPosition) == true)
-                return true;
+    public void verifyFirstPipe() {
+        if (pipes_list.size() > 0) {
+            float x_position_of_first_pipe = pipes_list.get(0).getPosition().x;
+            if (x_position_of_first_pipe < - pipe_width) {
+                pipes_list.remove(0);
+            }
         }
-        return false;
     }
     
-    public float getDistanceBetweenPipes() {
-        return distance_between_pipes;
+    public void tryToAddPipe() {    
+        if (current_number_of_pipes < number_of_pipes && calculateLastDistance() >= distance_between_pipes) {
+            addNewPipe();
+        }
+    }
+    
+    public void addNewPipe() {
+        println("Added new pipe");
+        pipes_list.add(new Pipe(new PVector(width, 0), horizontal_velocity));
+    }
+    
+    public float calculateLastDistance() {
+        if (pipes_list.size() > 0) {
+            float x_position_of_last_pipe = pipes_list.get(pipes_list.size() - 1).getPosition().x;
+            return width - x_position_of_last_pipe;
+        }
+        return 0;
     }
     
     public void updatePipesDistance() {
@@ -65,51 +85,44 @@ public class Pipes{
     public void updatePipesSpeed() {
         if (horizontal_velocity < max_horizontal_velocity) {
             horizontal_velocity += increment_horizontal_velocity;
-            for (Pipe pipe : pipesList) {
-                pipe.updateSpeed(horizontal_velocity);
+            float delta_horizontal_velocity = horizontal_velocity * delta;
+            for (Pipe pipe : pipes_list) {
+                pipe.updateSpeed(delta_horizontal_velocity);
             }
         }
     }
     
-    public void verifyFirstPipe() {
-        float x_position_of_first_pipe = pipesList.get(0).getPosition().x;
-        if (x_position_of_first_pipe < - pipeWidth) {
-            pipesList.remove(0);
-        }
-    }
-    
-    public void tryToAddPipe() {
-        if (current_number_of_pipes < number_of_pipes && calculateDistance() >= distance_between_pipes) {
-            addNewPipe();
-        }
-    }
-    
-    public float calculateDistance() {
-        float x_position_of_last_pipe = pipesList.get(pipesList.size() - 1).getPosition().x;
-        return width - x_position_of_last_pipe;
-    }
-    
-    public int size() {
-        return pipesList.size();
-    }
-    
-    public float getHorizontalVelocity() {
-        return horizontal_velocity;
-    }
-    
-    public boolean checkCollision(PVector positionOfBird) {
-        for (Pipe pipe : pipesList) {
-            if (pipe.checkIndividualCollision(positionOfBird) == true) {
-                for (Pipe pipE : pipesList) {
-                    pipE.setHorizontalVelocity(0f);
+    public boolean checkCollision(PVector bird_position) {
+        for (Pipe pipe : pipes_list) {
+            if (pipe.checkIndividualCollision(bird_position) == true) {
+                for (Pipe pipE : pipes_list) {
+                    pipE.updateSpeed(0f);
                 }
                 return true;
-         }
+            }
         }
         return false;
     }
     
-    public void addNewPipe() {
-        pipesList.add(new Pipe(new PVector(width, 0), horizontal_velocity));
+    public boolean isInAnyPipe(PVector bird_position) {
+        for (Pipe pipe : pipes_list) {
+            if (pipe.isInPipe(bird_position) == true)
+                return true;
+        }
+        return false;
     }
+    
+    public int size() {
+        return pipes_list.size();
+    }
+    
+    public float getHorizontalVelocity() {
+        return horizontal_velocity * delta;
+    }
+    
+    public float getDistanceBetweenPipes() {
+        return distance_between_pipes;
+    }
+    
+    
 }

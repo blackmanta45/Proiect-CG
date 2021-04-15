@@ -1,46 +1,44 @@
 public class TracePoint {
-
-    private PVector lastPosition;
-    private PVector currentPosition;
+    
+    private PVector last_position;
+    private PVector current_position;
     
     private float radius;
     private float time;
     private float stroke_weight_value;
-    private float offset = stroke_weight_value;
+    private float offset;
     
-    public TracePoint(PVector lastPosition, PVector currentPosition) {
-        this.lastPosition = lastPosition;
-        this.currentPosition = currentPosition;
+    private float slope; 
+    private float output;
+    
+    public TracePoint(PVector last_position, PVector current_position) {
+        this.last_position = last_position;
+        this.current_position = current_position;
         init();
     }
-
+    
     public void init() {
-        radius = 15f;
+        slope = 255 / bird.getPosition().x;
         time = 0f;
         stroke_weight_value = 20f;
         offset = stroke_weight_value / 10;
     }
-
+    
     public PVector getPosition() {
-        return currentPosition;
+        return current_position;
     }
-
+    
     public void display() {
-        time = (time % 1000) + 4f;
-        stroke(255, 255-time);
+        stroke(255, slope * current_position.x);
         strokeWeight(stroke_weight_value);
-        line(lastPosition.x, lastPosition.y, currentPosition.x - offset, currentPosition.y - offset);
-        radius -= .1f;
-        if (radius <= 0f) {
-            radius = 0f;
-        }
+        line(last_position.x, last_position.y, current_position.x - offset, current_position.y - offset);
     }
-
+    
     public void move() {
-        currentPosition.x -= pipes.getHorizontalVelocity();
+        current_position.x -= pipes.getHorizontalVelocity();
     }
-
+    
     public boolean needsDeletion() {
-        return time > 255;
+        return current_position.x < stroke_weight_value / 2;
     }
 }

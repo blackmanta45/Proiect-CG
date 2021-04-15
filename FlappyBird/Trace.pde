@@ -4,8 +4,8 @@ public class Trace {
     
     private float spacing;
     
-    private PVector lastPoint;
-    private ArrayList<TracePoint> traceList;
+    private PVector last_point;
+    private ArrayList<TracePoint> trace_list;
     
     public Trace(float spacing) {
         this.spacing = spacing;
@@ -13,40 +13,46 @@ public class Trace {
     }
     
     public void init() {
-        traceList = new ArrayList<TracePoint>();
+        trace_list = new ArrayList<TracePoint>();
     }
     
     public void update() {
         checkFirstElement();
-        for (TracePoint point : traceList) {
+        displayAndMove();
+        last_point = trace_list.get(trace_list.size() - 1).getPosition();
+    }
+    
+    public void checkFirstElement() {
+        if (trace_list.get(0).needsDeletion() == true) {
+            trace_list.remove(0);
+        }
+    }
+    
+    public void displayAndMove() {
+        for (TracePoint point : trace_list) {
             if (bird.is_dead == false) {
                 point.move();
             }
             point.display();
         }
-        lastPoint = traceList.get(traceList.size() - 1).getPosition();
     }
     
-    public void addPoint(PVector pointPosition) {
-        if (verify(pointPosition) == true) {
-            TracePoint point = new TracePoint(lastPoint, pointPosition);
-            traceList.add(point);
+    public void addPoint(PVector point_position) {
+        if (verify(point_position) == true) {
+            TracePoint point = new TracePoint(last_point, point_position);
+            trace_list.add(point);
         }
     }
     
-    public boolean verify(PVector pointPosition) {
+    public boolean verify(PVector point_position) {
         float distance;
-        if (traceList.size() >= 1) {
-            distance = dist(lastPoint.x, lastPoint.y, pointPosition.x, pointPosition.y);
+        if (trace_list.size() >= 1) {
+            distance = dist(last_point.x, last_point.y, point_position.x, point_position.y);
             return distance >= spacing;
         }
-        lastPoint = pointPosition;
+        last_point = point_position;
         return true;    
     }
     
-    public void checkFirstElement() {
-        if (traceList.get(0).needsDeletion() == true) {
-            traceList.remove(0);
-        }
-    }
+    
 }

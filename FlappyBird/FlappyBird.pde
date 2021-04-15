@@ -12,7 +12,13 @@ Scene customizePipeScene = new Scene();
 Bird bird;
 Pipes pipes;
 UI ui;
-int fps = 60;
+Ground ground;
+
+int fps = 1000;
+float deltaTime = 0;
+float previousTime = 0;
+float deltaDivider = 1.8e1;
+float delta;
 
 void setup() 
 {
@@ -28,11 +34,18 @@ void setup()
     bird = new Bird(new PVector(displayWidth * 25 / 100f, displayHeight / 2));
     pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity);
     ui = new UI(pipes, bird);
-    
+    ground = new Ground();
+
+    previousTime = millis();
 }
 
 void draw()
 {
+    deltaTime = millis() - previousTime;
+    previousTime = millis();
+    
+    delta = deltaTime / deltaDivider;
+    
     background(100);
     
     pipes.update();
@@ -40,6 +53,8 @@ void draw()
     bird.update();
     
     ui.update();
+
+    ground.update();
     
     println(frameRate + " fps");
 }

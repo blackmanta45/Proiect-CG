@@ -5,10 +5,10 @@ public class Bird {
     private PImage img;
     
     private static final float WIDTH = 90f;
-    private final float ACCELERATION =.7f;
+    private final float ACCELERATION = .7f;
     
     private float vertical_velocity;
-    private float terminal_velocity;
+    private float max_vertical_velocity;
     private float jump_force;
     private float rotation_angle;
     private float max_rotation_angle;
@@ -29,7 +29,7 @@ public class Bird {
     public void init() {
         img = loadImage("../Images/bird_default.png");
         vertical_velocity = 0f;
-        terminal_velocity = 15f;
+        max_vertical_velocity = 15f;
         jump_force = 27f;
         rotation_angle = 0f;
         trace = new Trace(.1f);
@@ -51,8 +51,16 @@ public class Bird {
         checkCollision();
     }
     
-    public PVector getPosition() {
-        return position;
+    public void die() {
+        if (is_dead == true && position.y >= height) {
+            // noLoop(); // Stops Program
+            exit(); // Exits Program
+        }
+    }
+    
+    public void traceUpdate() {
+        trace.addPoint(new PVector(position.x + WIDTH / 2, position.y + WIDTH / 2));
+        trace.update();
     }
     
     public void display() {
@@ -67,16 +75,17 @@ public class Bird {
         if (pipes.size() >= 1) {
             max_rotation_angle = 87f - (3 * pipes.getHorizontalVelocity());
         }
-        rotation_angle = max_rotation_angle / terminal_velocity * vertical_velocity;
+        rotation_angle = max_rotation_angle / max_vertical_velocity * vertical_velocity;
     }
     
     public void fall() {
-        if (vertical_velocity <= terminal_velocity)
-            vertical_velocity += ACCELERATION;
-        position.y += vertical_velocity;
-        if (vertical_velocity <= - jump_force / 2) {
+        if (vertical_velocity <= max_vertical_velocity) //max fall
+            vertical_velocity += ACCELERATION * delta;
+        
+        if (vertical_velocity <= - jump_force / 2)  //max rise
             vertical_velocity = - jump_force / 2;
-        }
+        
+        position.y += vertical_velocity * delta;
         if (position.y > height) {
             is_dead = true;
         }
@@ -87,6 +96,8 @@ public class Bird {
     }
     
     public void jump() {
+        // if(keyPressed == true)
+        //     vertical_velocity -= jump_force * delta;
         if (is_dead == false) {
             if (keyPressed == true) {
                 if (is_jumping == false) {
@@ -100,13 +111,6 @@ public class Bird {
         }
         if (position.y <= 0) {
             position.y = 0; 
-        }
-    }
-    
-    public void die() {
-        if (is_dead == true && position.y >= height) {
-            // noLoop(); // Stops Program
-            exit(); // Exits Program
         }
     }
     
@@ -130,8 +134,8 @@ public class Bird {
         return false;
     }
     
-    public void traceUpdate() {
-        trace.addPoint(new PVector(position.x + WIDTH / 2, position.y + WIDTH / 2));
-        trace.update();
+    public PVector getPosition() {
+        return position;
     }
+    
 }
