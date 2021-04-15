@@ -37,8 +37,8 @@ public class Pipes{
     }
 
     public void updatePipesDistance(){
-        if(distance_between_pipes > 500){
-            distance_between_pipes -= 1;
+        if(distance_between_pipes < 700){
+            distance_between_pipes += 10;
             number_of_pipes = width / distance_between_pipes + 1;
         }
     }

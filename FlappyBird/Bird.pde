@@ -115,6 +115,10 @@ public class Bird {
         // rect(score_node.x, score_node.y, 10, 10);
         if (position.x >= score_node.x) {
             ui.score++;
+            if(ui.score % 5 == 0){
+                pipes.updatePipesSpeed();
+                pipes.updatePipesDistance();
+            }
             score_node.x += pipes.getDistanceBetweenPipes();
         }
         score_node.x -= pipes.getHorizontalVelocity();
