@@ -117,7 +117,7 @@ public class Bird {
             ui.score++;
             if(ui.score % 5 == 0){
                 pipes.updatePipesSpeed();
-                pipes.updatePipesDistance();
+                //pipes.updatePipesDistance();
             }
             score_node.x += pipes.getDistanceBetweenPipes();
         }

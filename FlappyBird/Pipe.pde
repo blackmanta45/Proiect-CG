@@ -10,12 +10,13 @@ public class Pipe {
     //private int number_of_pipes = width / distance_between_pipes + 1;
     private float horizontal_velocity = 6f; 
     private float max_horizontal_velocity = horizontal_velocity + 1f;
-    private float spacing_height = 300f;
+    private float spacing_height = random(250,400);
     private float upper_height;
     private float lower_height;
 
-    public Pipe(PVector position) {
+    public Pipe(PVector position, float horizontal_velocity) {
         this.position = position;
+        this.horizontal_velocity = horizontal_velocity;
         spacing_position = new PVector();
         spacing_position.y = random(100, height - spacing_height - 100);
         upper_height = spacing_position.y;
@@ -76,10 +77,7 @@ public class Pipe {
          return isInPipe && isNotInHole;
     }
 
-    public void increaseSpeed() {
-        horizontal_velocity += .1f;
-        if (horizontal_velocity >= max_horizontal_velocity) {
-            horizontal_velocity = max_horizontal_velocity;
-        }
+    public void updateSpeed(float new_horizontal_velocity) {
+        horizontal_velocity = new_horizontal_velocity;
     }
 }

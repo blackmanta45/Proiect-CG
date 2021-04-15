@@ -4,13 +4,15 @@ import java.util.List;
 public class Pipes{
     private List<Pipe> pipesList;
     private int number_of_pipes;
+    private float horizontal_velocity;
     private int current_number_of_pipes;
-    private int distance_between_pipes;
+    private float distance_between_pipes;
     
 
     public Pipes(){
-        this.distance_between_pipes = 600;
-        this.number_of_pipes = width / distance_between_pipes + 1;
+        this.distance_between_pipes = 600f;
+        this.number_of_pipes = Math.round(width / distance_between_pipes) + 1;
+        this.horizontal_velocity = 6f;
         this.pipesList = new ArrayList<Pipe>();
         this.current_number_of_pipes = 0;
         init();
@@ -39,13 +41,16 @@ public class Pipes{
     public void updatePipesDistance(){
         if(distance_between_pipes < 700){
             distance_between_pipes += 10;
-            number_of_pipes = width / distance_between_pipes + 1;
+            number_of_pipes = Math.round(width / distance_between_pipes) + 1;
         }
     }
 
     public void updatePipesSpeed(){
-        for(Pipe pipe : pipesList){
-            pipe.increaseSpeed();
+        if(horizontal_velocity < 7f){
+            horizontal_velocity += .1f;
+            for(Pipe pipe : pipesList){
+                pipe.updateSpeed(horizontal_velocity);
+            }
         }
     }
 
@@ -92,6 +97,6 @@ public class Pipes{
 
     public void addNewPipe(){
         println("Added new pipe");
-        pipesList.add(new Pipe(new PVector(width, 0)));
+        pipesList.add(new Pipe(new PVector(width, 0), horizontal_velocity));
     }
 }
