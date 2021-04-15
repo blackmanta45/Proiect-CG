@@ -1,21 +1,21 @@
 import java.util.ArrayList;
 
 public class Trace {
-
+    
     private float spacing;
-
+    
     private PVector lastPoint;
     private ArrayList<TracePoint> traceList;
-
-    public Trace (float spacing) {
+    
+    public Trace(float spacing) {
         this.spacing = spacing;
         init();
     }
-
+    
     public void init() {
         traceList = new ArrayList<TracePoint>();
     }
-
+    
     public void update() {
         checkFirstElement();
         for (TracePoint point : traceList) {
@@ -26,14 +26,14 @@ public class Trace {
         }
         lastPoint = traceList.get(traceList.size() - 1).getPosition();
     }
-
+    
     public void addPoint(PVector pointPosition) {
         if (verify(pointPosition) == true) {
             TracePoint point = new TracePoint(lastPoint, pointPosition);
             traceList.add(point);
         }
     }
-
+    
     public boolean verify(PVector pointPosition) {
         float distance;
         if (traceList.size() >= 1) {
@@ -43,7 +43,7 @@ public class Trace {
         lastPoint = pointPosition;
         return true;    
     }
-
+    
     public void checkFirstElement() {
         if (traceList.get(0).needsDeletion() == true) {
             traceList.remove(0);

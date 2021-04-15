@@ -3,23 +3,23 @@ public class Bird {
     private PVector position;
     
     private PImage img;
-
-    private PVector score_node;
     
-    private static final float WIDTH = 70f;
+    private static final float WIDTH = 90f;
     private final float ACCELERATION =.7f;
-
+    
     private float vertical_velocity;
     private float terminal_velocity;
     private float jump_force;
     private float rotation_angle;
     private float max_rotation_angle;
-
+    
     private Trace trace;
     
     private boolean is_dead;
     private boolean is_jumping;
     private boolean is_inside_pipe;
+    private boolean is_in_pipe;
+    private boolean was_in_pipe;
     
     public Bird(PVector position) {
         this.position = position;
@@ -33,13 +33,14 @@ public class Bird {
         jump_force = 27f;
         rotation_angle = 0f;
         trace = new Trace(.1f);
-        score_node = new PVector(width + Pipe.WIDTH, height / 2);
-
+        
         is_dead = false;
         is_jumping = false;
         is_inside_pipe = false;
+        is_in_pipe = false;
+        was_in_pipe = false;
     }
-
+    
     public void update() {
         die();
         traceUpdate();
@@ -47,10 +48,9 @@ public class Bird {
         rotation();
         fall();
         jump();
-        score();
         checkCollision();
     }
-
+    
     public PVector getPosition() {
         return position;
     }
@@ -59,7 +59,7 @@ public class Bird {
         pushMatrix();
         translate(position.x + WIDTH / 2, position.y + WIDTH / 2);
         rotate(radians(rotation_angle));
-        image(img, - WIDTH / 2 - 10, - WIDTH / 2 - 10, WIDTH + 20, WIDTH + 20); //Drawing the bird's image
+        image(img, - WIDTH / 2, - WIDTH / 2, WIDTH, WIDTH); //Drawing the bird's image
         popMatrix();
     }
     
@@ -82,6 +82,10 @@ public class Bird {
         }
     }
     
+    public boolean isDead() {
+        return is_dead;
+    }
+    
     public void jump() {
         if (is_dead == false) {
             if (keyPressed == true) {
@@ -99,34 +103,35 @@ public class Bird {
         }
     }
     
-    public void die(){
+    public void die() {
         if (is_dead == true && position.y >= height) {
             // noLoop(); // Stops Program
             exit(); // Exits Program
         }
     }
-
+    
     public void checkCollision() {
-        if(is_dead == false)
+        if (is_dead == false)
             is_dead = pipes.checkCollision(position);
     }
     
-    public void score() {
-        rect(score_node.x, score_node.y, 10, 10);
-        if (position.x >= score_node.x) {
-            ui.score++;
-            if(ui.score % 5 == 0){
-                pipes.updatePipesSpeed();
-            }
-            score_node.x += pipes.getDistanceBetweenPipes();
+    public boolean checkIfPassed() {
+        if (pipes.isInAnyPipe(position) == true) {
+            is_in_pipe = true;
+            was_in_pipe = true;
+        } else{
+            is_in_pipe = false;
         }
-        if (is_dead == false) {
-            score_node.x -= pipes.getHorizontalVelocity();
+        
+        if (is_in_pipe == false && was_in_pipe == true) {
+            was_in_pipe = false;
+            return true;
         }
+        return false;
     }
     
     public void traceUpdate() {
-        trace.addPoint(new PVector(position.x + WIDTH/2, position.y + WIDTH/2));
+        trace.addPoint(new PVector(position.x + WIDTH / 2, position.y + WIDTH / 2));
         trace.update();
     }
 }
