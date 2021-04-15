@@ -5,6 +5,8 @@ public class Pipes{
     private List<Pipe> pipesList;
     private int number_of_pipes;
     private float horizontal_velocity;
+    private float max_horizontal_velocity;
+    private float increment_horizontal_velocity;
     private int current_number_of_pipes;
     private float distance_between_pipes;
     
@@ -13,6 +15,8 @@ public class Pipes{
         this.distance_between_pipes = 600f;
         this.number_of_pipes = Math.round(width / distance_between_pipes) + 1;
         this.horizontal_velocity = 6f;
+        this.max_horizontal_velocity = 8f;
+        this.increment_horizontal_velocity = .2f;
         this.pipesList = new ArrayList<Pipe>();
         this.current_number_of_pipes = 0;
         init();
@@ -46,8 +50,8 @@ public class Pipes{
     }
 
     public void updatePipesSpeed(){
-        if(horizontal_velocity < 7f){
-            horizontal_velocity += .1f;
+        if(horizontal_velocity < max_horizontal_velocity){
+            horizontal_velocity += increment_horizontal_velocity;
             for(Pipe pipe : pipesList){
                 pipe.updateSpeed(horizontal_velocity);
             }
