@@ -1,6 +1,6 @@
 public class Bird {
     
-    private PImage img;
+    private PImage img = loadImage("Images/bird_default.png");
     private PVector position;
 
     private static final float WIDTH = 70f;
@@ -40,11 +40,11 @@ public class Bird {
         pushMatrix();
         translate(position.x + WIDTH/2, position.y + WIDTH/2);
         rotate(radians(rotation_angle));
-        noFill();
-        stroke(#FFA500);
-        rect(35, -15, 30, 30);
-        stroke(#00FF00);
-        rect(-35, -35, 70, 70);
+        // noFill();
+        // stroke(#FF0000);
+        // strokeWeight(1);
+        // rect(-35, -35, 70, 70);
+        image(img, -WIDTH/2-10, -WIDTH/2-10, WIDTH+20, WIDTH+20); //Drawing the bird's image
         popMatrix();
     }
 

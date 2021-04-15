@@ -33,13 +33,13 @@ void setup()
 
 void draw()
 {
-    background(0);
-
-    bird.update();
+    background(100);
 
     for (Pipe pipe : pipes) {
         pipe.update();
     }
+
+    bird.update();
 
     ui.displayScore();
 

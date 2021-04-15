@@ -10,7 +10,7 @@ public class Trace {
     }
 
     public void display() {
-        time = (time % 1000) + 3.75f;
+        time = (time % 1000) + 4f;
         fill(#FFFFFF, 255 - time);
         noStroke();
         ellipse(position.x, position.y, radius, radius);

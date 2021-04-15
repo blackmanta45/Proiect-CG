@@ -7,9 +7,9 @@ public class Pipe {
     public static final int distance_between_pipes = 550;
     private int number_of_pipes = width / distance_between_pipes + 1;
 
-    private float horizontal_velocity = 10f; 
+    private float horizontal_velocity = 6f; 
     private float max_horizontal_velocity = horizontal_velocity + 1f;
-    private float spacing_height = 275f;
+    private float spacing_height = 250f;
     public static final float WIDTH = 120f;
     private float upper_height;
     private float lower_height;
@@ -50,9 +50,9 @@ public class Pipe {
     }
 
     public void display() {
-        noFill();
-        stroke(#FF00FF);
-        strokeWeight(3);
+        fill(#00FF00);
+        stroke(0);
+        strokeWeight(4);
         rect(position.x, 0, WIDTH, upper_height);
         rect(position.x, spacing_position.y + spacing_height, WIDTH, lower_height);
     }
