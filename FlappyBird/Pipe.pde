@@ -10,7 +10,7 @@ public class Pipe {
     //private int number_of_pipes = width / distance_between_pipes + 1;
     private float horizontal_velocity = 6f; 
     private float max_horizontal_velocity = horizontal_velocity + 1f;
-    private float spacing_height = random(250,400);
+    private float spacing_height = random(250,300);
     private float upper_height;
     private float lower_height;
 
