@@ -4,7 +4,7 @@ public class Bird {
     
     private PImage img;
     
-    private static final float WIDTH = 90f;
+    private final float bird_width = displayHeight / 14.4f;
     private final float ACCELERATION = .7f;
     
     private float vertical_velocity;
@@ -29,8 +29,8 @@ public class Bird {
     public void init() {
         img = loadImage("../Images/bird_default.png");
         vertical_velocity = 0f;
-        max_vertical_velocity = 15f;
-        jump_force = 27f;
+        jump_force = displayHeight / 45f;
+        max_vertical_velocity = jump_force / 2.2;
         rotation_angle = 0f;
         trace = new Trace(.1f);
         
@@ -52,30 +52,32 @@ public class Bird {
     }
     
     public void die() {
-        if (is_dead == true && position.y >= height) {
-            // noLoop(); // Stops Program
-            exit(); // Exits Program
-        }
+        // if (is_dead == true) {
+        //     noLoop(); // Stops Program
+        //     // exit(); // Exits Program
+        // }
     }
     
     public void traceUpdate() {
-        trace.addPoint(new PVector(position.x + WIDTH / 2, position.y + WIDTH / 2));
+        trace.addPoint(new PVector(position.x + bird_width / 2, position.y + bird_width / 2));
         trace.update();
     }
     
     public void display() {
         pushMatrix();
-        translate(position.x + WIDTH / 2, position.y + WIDTH / 2);
+        translate(position.x + bird_width / 2, position.y + bird_width / 2);
         rotate(radians(rotation_angle));
-        image(img, - WIDTH / 2, - WIDTH / 2, WIDTH, WIDTH); //Drawing the bird's image
+        image(img, - bird_width / 2, - bird_width / 2, bird_width, bird_width); //Drawing the bird's image
         popMatrix();
     }
     
     public void rotation() {
-        if (pipes.size() >= 1) {
-            max_rotation_angle = 87f - (3 * pipes.getHorizontalVelocity());
+        if (isDead() == false) {
+            if (pipes.size() >= 1) {
+                max_rotation_angle = 87f - (3 * pipes.getHorizontalVelocity());
+            }
+            rotation_angle = max_rotation_angle / max_vertical_velocity * vertical_velocity;
         }
-        rotation_angle = max_rotation_angle / max_vertical_velocity * vertical_velocity;
     }
     
     public void fall() {
@@ -85,8 +87,10 @@ public class Bird {
         if (vertical_velocity <= - jump_force / 2)  //max rise
             vertical_velocity = - jump_force / 2;
         
-        position.y += vertical_velocity * delta;
-        if (position.y > height) {
+        if (position.y + bird_width < displayHeight - ground.getHeight()) {
+            position.y += vertical_velocity * delta;
+        }
+        else {
             is_dead = true;
         }
     }
@@ -138,4 +142,7 @@ public class Bird {
         return position;
     }
     
+    public float getBirdWidth() {
+        return bird_width;
+    }
 }

@@ -11,7 +11,7 @@ Scene customizePipeScene = new Scene();
 
 Bird bird;
 Pipes pipes;
-UI ui;
+Score score;
 Ground ground;
 
 int fps = 1000;
@@ -29,11 +29,11 @@ void setup()
     
     float horizontal_velocity = 6f;
     float max_horizontal_velocity = 8f;  
-    float increment_horizontal_velocity =.2f;
+    float increment_horizontal_velocity = .3f;
     
     bird = new Bird(new PVector(displayWidth * 25 / 100f, displayHeight / 2));
     pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity);
-    ui = new UI(pipes, bird);
+    score = new Score(pipes, bird);
     ground = new Ground();
 
     previousTime = millis();
@@ -50,11 +50,12 @@ void draw()
     
     pipes.update();
     
+    ground.update();
+
     bird.update();
     
-    ui.update();
-
-    ground.update();
+    score.update();
     
-    println(frameRate + " fps");
+    textSize(50);
+    text(frameRate + " fps", 20, 50);
 }

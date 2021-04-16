@@ -23,7 +23,7 @@ public class Pipes{
     }
     
     public void init() {
-        this.distance_between_pipes = 600f;
+        this.distance_between_pipes = displayWidth / 4;
         this.number_of_pipes = Math.round(width / distance_between_pipes) + 1;
         this.pipes_list = new ArrayList<Pipe>();
         this.current_number_of_pipes = 0;
@@ -41,7 +41,7 @@ public class Pipes{
         float new_speed = horizontal_velocity * delta;
         //println(new_speed);
         for (Pipe pipe : pipes_list) {
-            if (bird.isDead() == false)
+            if (bird.isDead() == false) 
                 pipe.updateSpeed(new_speed);
             pipe.update();
         }

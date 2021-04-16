@@ -3,12 +3,13 @@ public class Pipe {
     private PVector position;
     private float horizontal_velocity;
     
-    private PImage img;
+    private PImage top_part;
+    private PImage bottom_part;
     private PVector hole_position;
     
     
     private final int reduce_hitbox_percentage = 10;
-    private final int pipe_width_percentage = 21;
+    private final int pipe_width_percentage = 16;
     private final float pipe_width = displayWidth / pipe_width_percentage;
     
     private float hole_size;
@@ -23,8 +24,11 @@ public class Pipe {
     
     public void init() {
         hole_position = new PVector();
-        hole_size = random(250, 350);
-        hole_position.y = random(100, displayHeight - hole_size - displayHeight / 8.5);
+        top_part = loadImage("../Images/pipe_default.png");
+        bottom_part = loadImage("../Images/pipe_default.png");
+        hole_size = random(displayHeight / 4.2f, displayHeight / 3.75f);
+        hole_position.y = random(100, displayHeight - hole_size - displayHeight / 5.1);
+        println(hole_position.y);
         upper_pipe_size = hole_position.y;
         lower_pipe_size = height - (hole_position.y + hole_size);
     }
@@ -35,25 +39,32 @@ public class Pipe {
     }
     
     public void display() {
-        fill(#00FF00);
-        stroke(0);
-        strokeWeight(4);
-        rect(position.x, 0, pipe_width, upper_pipe_size);
-        rect(position.x, hole_position.y + hole_size, pipe_width, lower_pipe_size);
+        // Top Image
+        pushMatrix();
+        translate(0, displayHeight);
+        scale(1,-1);
+        image(top_part, position.x, displayHeight - hole_position.y, pipe_width, bottom_part.height);
+        translate(0, -displayHeight);
+        popMatrix();
+
+        // Bottom Image
+        image(bottom_part, position.x, hole_position.y + hole_size, pipe_width, bottom_part.height);
     }
     
     public void move() {
-        position.x -= horizontal_velocity;
+        if (bird.isDead() == false) {
+            position.x -= horizontal_velocity;
+        }
     }
     
     public boolean checkIndividualCollision(PVector bird_position) {
         boolean is_in_pipe = isInPipe(bird_position);
-        boolean is_not_in_hole = bird_position.y + Bird.WIDTH * reduce_hitbox_percentage / 100 <= hole_position.y || bird_position.y + Bird.WIDTH * (100 - reduce_hitbox_percentage) / 100 >= hole_position.y + hole_size;
+        boolean is_not_in_hole = bird_position.y + bird.getBirdWidth() * reduce_hitbox_percentage / 100 <= hole_position.y || bird_position.y + bird.getBirdWidth() * (100 - reduce_hitbox_percentage) / 100 >= hole_position.y + hole_size;
         return is_in_pipe && is_not_in_hole;
     }
     
     public boolean isInPipe(PVector bird_position) {
-        return bird_position.x + Bird.WIDTH * (100 - reduce_hitbox_percentage) / 100 >= position.x && bird_position.x + reduce_hitbox_percentage / 100 <= position.x + pipe_width;
+        return bird_position.x + bird.getBirdWidth() * (100 - reduce_hitbox_percentage) / 100 >= position.x && bird_position.x + reduce_hitbox_percentage / 100 <= position.x + pipe_width;
     }
     
     public void updateSpeed(float new_horizontal_velocity) {

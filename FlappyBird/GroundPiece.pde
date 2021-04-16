@@ -1,4 +1,5 @@
 public class GroundPiece{
+    
     private PVector position;
     private PVector top_part_size;
     private PVector bottom_part_size;

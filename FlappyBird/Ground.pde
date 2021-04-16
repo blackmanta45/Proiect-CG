@@ -1,4 +1,5 @@
 public class Ground{
+
     private ArrayList<GroundPiece> ground_piece_list = new ArrayList<GroundPiece>();
     private float top_part_height;
     private float bottom_part_height;
@@ -57,5 +58,9 @@ public class Ground{
         PVector top_part_size = new PVector(ground_piece_width, top_part_height);
         PVector bottom_part_size = new PVector(ground_piece_width, bottom_part_height);
         ground_piece_list.add(new GroundPiece(top_left_corner, top_part_size, bottom_part_size));
+    }
+
+    public float getHeight() {
+        return top_part_height + bottom_part_height;
     }
 }

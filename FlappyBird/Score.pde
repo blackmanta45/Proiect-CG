@@ -1,10 +1,13 @@
-public class UI {
+public class Score {
     
     private int score;
     private Pipes pipes;
     private Bird bird;
+
+    private float textSize;
+    private PVector position;
     
-    public UI(Pipes pipes, Bird bird) {
+    public Score(Pipes pipes, Bird bird) {
         this.pipes = pipes;
         this.bird = bird;
         init();
@@ -12,6 +15,10 @@ public class UI {
     
     public void init() {
         score = 0;
+        textSize = displayHeight / 14f;
+        position = new PVector();
+        position.x = displayWidth / 2 - textSize / 2;
+        position.y = textSize;
     }
     
     public void update() {
@@ -21,8 +28,9 @@ public class UI {
     
     public void displayScore() {
         fill(255);
-        textSize(50);
-        text("SCORE: " + score, width / 2 - 100, 75);
+        textSize(textSize);
+        text(score, position.x, position.y);
+        
     }
     
     public void tryToIncrement() {
