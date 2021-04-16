@@ -13,8 +13,6 @@ public class Pipe {
     private final float pipe_width = displayWidth / pipe_width_percentage;
     
     private float hole_size;
-    private float upper_pipe_size;
-    private float lower_pipe_size;
     
     public Pipe(PVector position, float horizontal_velocity) {
         this.position = position;
@@ -29,8 +27,6 @@ public class Pipe {
         hole_size = random(displayHeight / 4.2f, displayHeight / 3.75f);
         hole_position.y = random(100, displayHeight - hole_size - displayHeight / 5.1);
         println(hole_position.y);
-        upper_pipe_size = hole_position.y;
-        lower_pipe_size = height - (hole_position.y + hole_size);
     }
     
     public void update() {
@@ -42,11 +38,11 @@ public class Pipe {
         // Top Image
         pushMatrix();
         translate(0, displayHeight);
-        scale(1,-1);
+        scale(1, - 1);
         image(top_part, position.x, displayHeight - hole_position.y, pipe_width, bottom_part.height);
-        translate(0, -displayHeight);
+        translate(0, - displayHeight);
         popMatrix();
-
+        
         // Bottom Image
         image(bottom_part, position.x, hole_position.y + hole_size, pipe_width, bottom_part.height);
     }

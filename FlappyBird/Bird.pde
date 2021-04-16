@@ -55,7 +55,7 @@ public class Bird {
         // if (is_dead == true) {
         //     noLoop(); // Stops Program
         //     // exit(); // Exits Program
-        // }
+    // }
     }
     
     public void traceUpdate() {
