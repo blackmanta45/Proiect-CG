@@ -4,8 +4,12 @@ public class Ground{
     private float top_part_height;
     private float bottom_part_height;
     private float ground_piece_width;
-    private float number_of_pieces;
     private float horizontal_velocity;
+    private float bottom_part_y;
+    private float top_part_y;
+    private int number_of_pieces;
+
+    private PImage bottom_image = loadImage("../Images/ground_bottom_default.png");
     
     public Ground() {
         init();
@@ -14,50 +18,55 @@ public class Ground{
     public void init() {
         top_part_height = displayHeight / 49;
         bottom_part_height = displayHeight / 12;
-        ground_piece_width = bottom_part_height / 90 * 336;
-        number_of_pieces = displayWidth / ground_piece_width + 2;
-        fillGround();
+        ground_piece_width = bottom_part_height / 90 * 6720;
+        number_of_pieces = Math.round(displayWidth / ground_piece_width) + 2;
+        bottom_part_y = displayHeight - bottom_part_height;
+        top_part_y = displayHeight - top_part_height - bottom_part_height;
+        fillGroundTop();
     }
     
-    public void fillGround() {
-        float start = - 2;
-        while(start <= number_of_pieces) {
-            addOne(start * ground_piece_width);
-            start ++;
+    public void fillGroundTop() {
+        int i = 0;
+        while(i < number_of_pieces) {
+            addOne(i);
+            i++;
         }
-        println(ground_piece_list.size());
+    }
+
+    public void fillGroundBottom(){
+        image(bottom_image, 0, bottom_part_y, ground_piece_width, bottom_part_height);
     }
     
     public void update() {
         updateLocation();
-        verifyCompleteness();
+        fillGroundBottom();
     }
     
     public void updateLocation() {
         horizontal_velocity = pipes.getHorizontalVelocity();
-        for (int i = 0; i < ground_piece_list.size();i++) {
-            ground_piece_list.get(i).update(horizontal_velocity);
-            if (ground_piece_list.get(i).needsDeletion() == true) {
-                ground_piece_list.remove(i);
-            }
-            if (i > 1) {
-                float xOffset = ground_piece_list.get(i).getPosition().x - ground_piece_list.get(i - 1).getPosition().x - ground_piece_width;
-                ground_piece_list.get(i - 1).updateXoffset(xOffset);
-            }
+        
+        if(ground_piece_list.get(0).needsDeletion() == true)
+            swap(0, ground_piece_list.size() - 1);
+
+        ground_piece_list.get(0).update(horizontal_velocity);
+
+        for(int i = 1; i < ground_piece_list.size(); i++){
+            ground_piece_list.get(i).setPosition(new PVector(ground_piece_list.get(i - 1).getPosition().x + ground_piece_width, top_part_y));
+            ground_piece_list.get(i).display();
         }
     }
-    
-    public void verifyCompleteness() {
-        if (ground_piece_list.size() < number_of_pieces) {
-            addOne(ground_piece_list.get(ground_piece_list.size() - 1).getPosition().x + ground_piece_width);
-        }
+
+    public void swap(int index1, int index2){
+        GroundPiece aux = ground_piece_list.get(index1);
+        ground_piece_list.set(index1, ground_piece_list.get(index2));
+        ground_piece_list.set(index2, aux);
     }
     
-    public void addOne(float x) {
+    public void addOne(int i) {
+        float x = i * ground_piece_width;
         PVector top_left_corner = new PVector(x, displayHeight - bottom_part_height - top_part_height);
         PVector top_part_size = new PVector(ground_piece_width, top_part_height);
-        PVector bottom_part_size = new PVector(ground_piece_width, bottom_part_height);
-        ground_piece_list.add(new GroundPiece(top_left_corner, top_part_size, bottom_part_size));
+        ground_piece_list.add(new GroundPiece(top_left_corner, top_part_size));
     }
     
     public float getHeight() {

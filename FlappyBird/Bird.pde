@@ -32,7 +32,7 @@ public class Bird {
         jump_force = displayHeight / 50f;
         max_vertical_velocity = jump_force / 2.2;
         rotation_angle = 0f;
-        trace = new Trace(.1f);
+        trace = new Trace(.1f, position.x);
         
         is_dead = false;
         is_jumping = false;
@@ -139,7 +139,7 @@ public class Bird {
     }
     
     public PVector getPosition() {
-        return position;
+        return this.position;
     }
     
     public float getBirdWidth() {

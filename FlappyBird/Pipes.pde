@@ -39,7 +39,6 @@ public class Pipes{
     
     public void updateAllPipes() {
         float new_speed = horizontal_velocity * delta;
-        //println(new_speed);
         for (Pipe pipe : pipes_list) {
             if (bird.isDead() == false) 
                 pipe.updateSpeed(new_speed);
@@ -63,7 +62,6 @@ public class Pipes{
     }
     
     public void addNewPipe() {
-        println("Added new pipe");
         pipes_list.add(new Pipe(new PVector(width, 0), horizontal_velocity));
     }
     
@@ -123,6 +121,5 @@ public class Pipes{
     public float getDistanceBetweenPipes() {
         return distance_between_pipes;
     }
-    
     
 }

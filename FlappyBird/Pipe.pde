@@ -26,7 +26,6 @@ public class Pipe {
         bottom_part = loadImage("../Images/pipe_default.png");
         hole_size = random(displayHeight / 4.2f, displayHeight / 3.75f);
         hole_position.y = random(100, displayHeight - hole_size - displayHeight / 5.1);
-        println(hole_position.y);
     }
     
     public void update() {

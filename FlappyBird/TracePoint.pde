@@ -3,25 +3,18 @@ public class TracePoint {
     private PVector last_position;
     private PVector current_position;
     
-    private float radius;
-    private float time;
-    private float stroke_weight_value;
-    private float offset;
-    
     private float slope; 
     private float output;
+    private float stroke_weight_value = 20f;
     
-    public TracePoint(PVector last_position, PVector current_position) {
+    public TracePoint(PVector last_position, PVector current_position, float slope) {
         this.last_position = last_position;
         this.current_position = current_position;
+        this.slope = slope;
         init();
     }
     
     public void init() {
-        slope = 255 / bird.getPosition().x;
-        time = 0f;
-        stroke_weight_value = 20f;
-        offset = stroke_weight_value / 10;
     }
     
     public PVector getPosition() {
@@ -31,7 +24,7 @@ public class TracePoint {
     public void display() {
         stroke(255, slope * current_position.x);
         strokeWeight(stroke_weight_value);
-        line(last_position.x, last_position.y, current_position.x - offset, current_position.y - offset);
+        line(last_position.x, last_position.y, current_position.x, current_position.y);
     }
     
     public void move() {
