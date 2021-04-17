@@ -14,6 +14,8 @@ Pipes pipes;
 Score score;
 Ground ground;
 
+Background bg;
+
 int fps = 60;
 float deltaTime = 0;
 float previousTime = 0;
@@ -36,6 +38,8 @@ void setup()
     score = new Score(pipes, bird);
     ground = new Ground();
     
+    bg = new Background();
+
     previousTime = millis();
 }
 
@@ -47,7 +51,8 @@ void draw()
     delta = deltaTime / deltaDivider;
     
     background(100);
-    
+    bg.update();
+
     pipes.update();
     
     ground.update();
@@ -55,7 +60,7 @@ void draw()
     bird.update();
     
     score.update();
-    
+
     textSize(50);
     text(frameRate + " fps", 20, 50);
 }

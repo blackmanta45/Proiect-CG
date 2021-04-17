@@ -29,7 +29,7 @@ public class Bird {
     public void init() {
         img = loadImage("../Images/bird_default.png");
         vertical_velocity = 0f;
-        jump_force = displayHeight / 45f;
+        jump_force = displayHeight / 50f;
         max_vertical_velocity = jump_force / 2.2;
         rotation_angle = 0f;
         trace = new Trace(.1f);
