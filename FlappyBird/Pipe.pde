@@ -47,9 +47,8 @@ public class Pipe {
     }
     
     public void move() {
-        if (bird.isDead() == false) {
-            position.x -= horizontal_velocity;
-        }
+        position.x -= horizontal_velocity;
+        // println(horizontal_velocity);
     }
     
     public boolean checkIndividualCollision(PVector bird_position) {

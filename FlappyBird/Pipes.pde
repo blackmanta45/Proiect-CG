@@ -38,6 +38,9 @@ public class Pipes{
     }
     
     public void updateAllPipes() {
+        if (bird.isDead() == true) {
+            horizontal_velocity = 0f;
+        }
         float new_speed = horizontal_velocity * delta;
         for (Pipe pipe : pipes_list) {
             if (bird.isDead() == false) 
@@ -122,4 +125,8 @@ public class Pipes{
         return distance_between_pipes;
     }
     
+    public float getFlatHorizontalVelocity() {
+        return horizontal_velocity;
+    }
+
 }

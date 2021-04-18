@@ -53,7 +53,7 @@ void draw()
     
     delta = deltaTime / deltaDivider;
     
-    background(100);
+    background(#87CEFA);
     bg.update();
 
     pipes.update();
