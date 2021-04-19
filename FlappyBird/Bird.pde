@@ -126,7 +126,7 @@ public class Bird implements IComponent{
         // if(keyPressed == true)
         //     vertical_velocity -= jump_force * delta;
         if (is_dead == false) {
-            if (keyPressed == true) {
+            if (keyPressed == true && key == ' ') {
                 if (is_jumping == false) {
                     vertical_velocity -= jump_force;
                     is_jumping = true;

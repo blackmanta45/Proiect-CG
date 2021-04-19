@@ -1,4 +1,4 @@
-public abstract interface IComponent {
+public interface IComponent {
     public boolean update();
 
     public void init();

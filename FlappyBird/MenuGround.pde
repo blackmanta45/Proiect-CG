@@ -1,4 +1,4 @@
-public class Ground implements IComponent{
+public class MenuGround implements IComponent, IGround{
     private Pipes pipes;
     
     private ArrayList<GroundPiece> ground_piece_list;
@@ -12,8 +12,8 @@ public class Ground implements IComponent{
 
     private PImage bottom_image = loadImage("../Images/ground_bottom_default.png");
     
-    public Ground(Pipes pipes) {
-        this.pipes = pipes;
+    public MenuGround(float horizontal_velocity) {
+        this.horizontal_velocity = horizontal_velocity;
         init();
     }
     
@@ -51,12 +51,12 @@ public class Ground implements IComponent{
     }
     
     public void updateLocation() {
-        horizontal_velocity = pipes.getHorizontalVelocity();
-        
+        float new_horizontal_velocity = horizontal_velocity * delta;
+
         if(ground_piece_list.get(0).needsDeletion() == true)
             swap(0, ground_piece_list.size() - 1);
 
-        ground_piece_list.get(0).update(horizontal_velocity);
+        ground_piece_list.get(0).update(new_horizontal_velocity);
 
         for(int i = 1; i < ground_piece_list.size(); i++){
             ground_piece_list.get(i).setPosition(new PVector(ground_piece_list.get(i - 1).getPosition().x + ground_piece_width, top_part_y));

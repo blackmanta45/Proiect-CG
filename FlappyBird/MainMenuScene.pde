@@ -1,12 +1,14 @@
 import java.util.List;
 import java.util.LinkedList;
 
-public class Scene {
-    
+public class MainMenuScene implements IScene{
+    private Scenes scenes;
+
     private List<IComponent> components;
     private boolean continueUpdate = true;
     
-    public Scene() {
+    public MainMenuScene(Scenes scenes) {
+        this.scenes = scenes;
         components = new LinkedList<IComponent>();
     }
 
@@ -18,21 +20,22 @@ public class Scene {
         return components;
     }
     
-    public void loadComponents() {
-        
-    }  
-    
-    public void unloadComponents() {
-        
-    }
-    
     public void update() {
+        restartCondition();
         for (IComponent component : components) {
             if(component.update() == false && continueUpdate == true){
                 continueUpdate = false;
             }
             if(continueUpdate == false){
                 component.stop();
+            }
+        }
+    }
+
+    private void restartCondition(){
+        if(keyPressed == true){
+            if(key == 'r'){
+                restart();
             }
         }
     }
