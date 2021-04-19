@@ -2,15 +2,17 @@ public class TracePoint {
     
     private PVector last_position;
     private PVector current_position;
-    
     private float slope; 
+    private Pipes pipes;
+
     private float output;
     private float stroke_weight_value = 20f;
     
-    public TracePoint(PVector last_position, PVector current_position, float slope) {
+    public TracePoint(PVector last_position, PVector current_position, float slope, Pipes pipes) {
         this.last_position = last_position;
         this.current_position = current_position;
         this.slope = slope;
+        this.pipes = pipes;
         init();
     }
     

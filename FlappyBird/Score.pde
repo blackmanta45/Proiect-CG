@@ -1,4 +1,4 @@
-public class Score {
+public class Score implements IComponent{
     
     private int score;
     private Pipes pipes;
@@ -7,9 +7,9 @@ public class Score {
     private float textSize;
     private PVector position;
     
-    public Score(Pipes pipes, Bird bird) {
-        this.pipes = pipes;
+    public Score(Bird bird, Pipes pipes) {
         this.bird = bird;
+        this.pipes = pipes;
         init();
     }
     
@@ -21,9 +21,16 @@ public class Score {
         position.y = textSize;
     }
     
-    public void update() {
+    public boolean update() {
         displayScore();
         tryToIncrement();
+        return true;
+    }
+
+    public void stop(){}
+
+    public void restart(){
+        score = 0;
     }
     
     public void displayScore() {

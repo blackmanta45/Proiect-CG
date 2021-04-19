@@ -3,17 +3,18 @@ import java.util.LinkedList;
 
 public class Scene {
     
-    private List<Component> components;
+    private List<IComponent> components;
+    private boolean continueUpdate = true;
     
     public Scene() {
-        components = new LinkedList<Component>();
+        components = new LinkedList<IComponent>();
     }
-    
-    public void addComponent(Component component) {
+
+    public void addComponent(IComponent component) {
         components.add(component);
     }
     
-    public List<Component> getComponents() {
+    public List<IComponent> getComponents() {
         return components;
     }
     
@@ -25,9 +26,21 @@ public class Scene {
         
     }
     
-    public void display() {
-        for (Component component : components) {
-            // component.display();
+    public void update() {
+        for (IComponent component : components) {
+            if(component.update() == false && continueUpdate == true){
+                continueUpdate = false;
+            }
+            if(continueUpdate == false){
+                component.stop();
+            }
         }
+    }
+
+    public void restart(){
+        for (IComponent component : components) {
+            component.init();
+        }
+        continueUpdate = true;
     }
 }

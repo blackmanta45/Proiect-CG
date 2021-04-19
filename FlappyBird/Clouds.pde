@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 
 public class Clouds {
+    private int number_of_clouds_per_level;
+    private Pipes pipes;
 
     private ArrayList<ArrayList<Cloud>> cloud_list;
     private int max_z = 3;
-    private int number_of_clouds_per_level;
     private float slope;
 
-    public Clouds(int number_of_clouds_per_level) {
+    public Clouds(int number_of_clouds_per_level, Pipes pipes) {
         this.number_of_clouds_per_level = number_of_clouds_per_level;
+        this.pipes = pipes;
         init();
     }
 
@@ -31,8 +33,18 @@ public class Clouds {
         }
     }
 
+    public void stop (){
+        for (ArrayList<Cloud> cloud_list_z : cloud_list) {
+            for (Cloud cloud : cloud_list_z) {
+                cloud.stop();
+            }
+        }
+    }
+
     public void addCloud(float z) {
-        Cloud cloud = new Cloud(new PVector(random(0, displayWidth), random(0, displayHeight / 2.5f)), random(pipes.getFlatHorizontalVelocity() - (max_z - 1 - z)*2, pipes.getFlatHorizontalVelocity() + z * 2), z, slope);
+        PVector cloud_position = new PVector(random(0, displayWidth), random(0, displayHeight / 2.5f));
+        float cloud_speed = random(pipes.getFlatHorizontalVelocity() - (max_z - 1 - z)*2, pipes.getFlatHorizontalVelocity() + z * 2);
+        Cloud cloud = new Cloud(cloud_position, cloud_speed, z, slope);
         cloud_list.get((int)z).add(cloud);
     }
 }

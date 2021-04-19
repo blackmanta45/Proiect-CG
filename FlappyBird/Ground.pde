@@ -1,6 +1,7 @@
-public class Ground{
+public class Ground implements IComponent{
+    private Pipes pipes;
     
-    private ArrayList<GroundPiece> ground_piece_list = new ArrayList<GroundPiece>();
+    private ArrayList<GroundPiece> ground_piece_list;
     private float top_part_height;
     private float bottom_part_height;
     private float ground_piece_width;
@@ -11,11 +12,13 @@ public class Ground{
 
     private PImage bottom_image = loadImage("../Images/ground_bottom_default.png");
     
-    public Ground() {
+    public Ground(Pipes pipes) {
+        this.pipes = pipes;
         init();
     }
     
     public void init() {
+        ground_piece_list = new ArrayList<GroundPiece>();
         top_part_height = displayHeight / 49;
         bottom_part_height = displayHeight / 12;
         ground_piece_width = bottom_part_height / 90 * 6720;
@@ -37,9 +40,14 @@ public class Ground{
         image(bottom_image, 0, bottom_part_y, ground_piece_width, bottom_part_height);
     }
     
-    public void update() {
+    public boolean update() {
         updateLocation();
         fillGroundBottom();
+        return true;
+    }
+
+    public void stop(){
+
     }
     
     public void updateLocation() {

@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pipes{
+public class Pipes implements IComponent{
     
-    private float horizontal_velocity;
+    private float start_horizontal_velocity;
     private float max_horizontal_velocity;
     private float increment_horizontal_velocity;
+    private float bird_width;
     
     private List<Pipe> pipes_list;
     
@@ -14,37 +15,48 @@ public class Pipes{
     
     private float distance_between_pipes;
     private float pipe_width;
+    private float horizontal_velocity;
     
-    public Pipes(float horizontal_velocity, float max_horizontal_velocity, float increment_horizontal_velocity) {
-        this.horizontal_velocity = horizontal_velocity;
+    public Pipes(float start_horizontal_velocity, float max_horizontal_velocity, float increment_horizontal_velocity, float bird_width) {
+        this.start_horizontal_velocity = start_horizontal_velocity;
         this.max_horizontal_velocity = max_horizontal_velocity;
         this.increment_horizontal_velocity = increment_horizontal_velocity;
+        this.bird_width = bird_width;
         init();
     }
     
     public void init() {
+        horizontal_velocity = start_horizontal_velocity;
         this.distance_between_pipes = displayWidth / 4;
         this.number_of_pipes = Math.round(width / distance_between_pipes) + 1;
-        this.pipes_list = new ArrayList<Pipe>();
         this.current_number_of_pipes = 0;
+        this.pipes_list = new ArrayList<Pipe>();
         addNewPipe();
         this.pipe_width = pipes_list.get(0).getPipeWidth();
     }
     
-    public void update() {
+    public boolean update() {
         updateAllPipes();
         verifyFirstPipe();
         tryToAddPipe();
+        return true;
+    }
+
+    public void stop(){
+        horizontal_velocity = 0;
+    }
+
+    public void restart(){
+        horizontal_velocity = start_horizontal_velocity;
     }
     
     public void updateAllPipes() {
-        if (bird.isDead() == true) {
-            horizontal_velocity = 0f;
-        }
+        // if (bird != null && bird.isDead() == true) {
+        //     horizontal_velocity = 0f;
+        // }
         float new_speed = horizontal_velocity * delta;
         for (Pipe pipe : pipes_list) {
-            if (bird.isDead() == false) 
-                pipe.updateSpeed(new_speed);
+            pipe.updateSpeed(new_speed);
             pipe.update();
         }
     }
@@ -65,7 +77,7 @@ public class Pipes{
     }
     
     public void addNewPipe() {
-        pipes_list.add(new Pipe(new PVector(width, 0), horizontal_velocity));
+        pipes_list.add(new Pipe(new PVector(width, 0), horizontal_velocity, bird_width));
     }
     
     public float calculateLastDistance() {

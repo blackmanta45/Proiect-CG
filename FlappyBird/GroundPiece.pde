@@ -24,9 +24,8 @@ public class GroundPiece{
         image(top_part, position.x, position.y, top_part_size.x, top_part_size.y);
     }
     
-    public void move(float amount) {
-        if (bird.isDead() == false)
-            position.x -= amount;
+    public void move(float x_velocity) {
+        position.x -= x_velocity;
     }
     
     public boolean needsDeletion() {

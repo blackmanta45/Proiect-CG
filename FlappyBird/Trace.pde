@@ -3,21 +3,25 @@ import java.util.ArrayList;
 public class Trace {
     
     private float spacing;
-    private float slope;
-    private float bird_x_position;
+    private Bird bird;
+    private Pipes pipes;
     
     private PVector last_point;
+    private float slope;
+    private float bird_x_position;
     private ArrayList<TracePoint> trace_list;
     
-    public Trace(float spacing, float bird_x_position) {
+    public Trace(float spacing, Bird bird, Pipes pipes) {
         this.spacing = spacing;
-        this.bird_x_position = bird_x_position;
+        this.bird = bird;
+        this.pipes = pipes;
         init();
     }
     
     public void init() {
-        trace_list = new ArrayList<TracePoint>();
         slope = 255 / bird_x_position;
+        bird_x_position = bird.getPosition().x;
+        trace_list = new ArrayList<TracePoint>();
     }
     
     public void update() {
@@ -43,7 +47,7 @@ public class Trace {
     
     public void addPoint(PVector point_position) {
         if (verify(point_position) == true) {
-            TracePoint point = new TracePoint(last_point, point_position, slope);
+            TracePoint point = new TracePoint(last_point, point_position, slope, pipes);
             trace_list.add(point);
         }
     }

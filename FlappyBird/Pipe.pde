@@ -2,6 +2,7 @@ public class Pipe {
     
     private PVector position;
     private float horizontal_velocity;
+    private float bird_width;
     
     private PImage top_part;
     private PImage bottom_part;
@@ -14,9 +15,10 @@ public class Pipe {
     
     private float hole_size;
     
-    public Pipe(PVector position, float horizontal_velocity) {
+    public Pipe(PVector position, float horizontal_velocity, float bird_width) {
         this.position = position;
         this.horizontal_velocity = horizontal_velocity;
+        this.bird_width = bird_width;
         init();
     }
     
@@ -48,17 +50,16 @@ public class Pipe {
     
     public void move() {
         position.x -= horizontal_velocity;
-        // println(horizontal_velocity);
     }
     
     public boolean checkIndividualCollision(PVector bird_position) {
         boolean is_in_pipe = isInPipe(bird_position);
-        boolean is_not_in_hole = bird_position.y + bird.getBirdWidth() * reduce_hitbox_percentage / 100 <= hole_position.y || bird_position.y + bird.getBirdWidth() * (100 - reduce_hitbox_percentage) / 100 >= hole_position.y + hole_size;
+        boolean is_not_in_hole = bird_position.y + bird_width * reduce_hitbox_percentage / 100 <= hole_position.y || bird_position.y + bird_width * (100 - reduce_hitbox_percentage) / 100 >= hole_position.y + hole_size;
         return is_in_pipe && is_not_in_hole;
     }
     
     public boolean isInPipe(PVector bird_position) {
-        return bird_position.x + bird.getBirdWidth() * (100 - reduce_hitbox_percentage) / 100 >= position.x && bird_position.x + reduce_hitbox_percentage / 100 <= position.x + pipe_width;
+        return bird_position.x + bird_width * (100 - reduce_hitbox_percentage) / 100 >= position.x && bird_position.x + reduce_hitbox_percentage / 100 <= position.x + pipe_width;
     }
     
     public void updateSpeed(float new_horizontal_velocity) {
