@@ -1,14 +1,14 @@
 import java.util.List;
 import java.util.LinkedList;
 
-public class PlayScene implements IScene{
+public class SimulateScene implements IScene{
     private Scenes scenes;
     
     private List<IComponent> components;
     private boolean continueUpdate;
     private float time_of_last_key;
     
-    public PlayScene(Scenes scenes) {
+    public SimulateScene(Scenes scenes) {
         this.scenes = scenes;
         components = new LinkedList<IComponent>();
         continueUpdate = true;
@@ -23,12 +23,10 @@ public class PlayScene implements IScene{
     }
     
     public void update() {
-        restartCondition();
         pauseCondition();
         for (IComponent component : components) {
-            if(component.update() == false && continueUpdate == true){
-                continueUpdate = false;
-                pause();
+            if(component.update() == false){
+                restart();
             }
         }
     }

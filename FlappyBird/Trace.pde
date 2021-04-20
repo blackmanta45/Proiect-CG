@@ -19,8 +19,8 @@ public class Trace {
     }
     
     public void init() {
-        slope = 255 / bird_x_position;
         bird_x_position = bird.getPosition().x;
+        slope = 255 / bird_x_position;
         trace_list = new ArrayList<TracePoint>();
     }
     
@@ -38,7 +38,7 @@ public class Trace {
     
     public void displayAndMove() {
         for (TracePoint point : trace_list) {
-            if (bird.is_dead == false) {
+            if (bird.isDead() == false) {
                 point.move();
             }
             point.display();

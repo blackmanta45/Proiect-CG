@@ -21,23 +21,12 @@ public class MainMenuScene implements IScene{
     }
     
     public void update() {
-        restartCondition();
         for (IComponent component : components) {
-            if(component.update() == false && continueUpdate == true){
-                continueUpdate = false;
-            }
-            if(continueUpdate == false){
-                component.stop();
-            }
+            component.update();
         }
     }
 
     private void restartCondition(){
-        if(keyPressed == true){
-            if(key == 'r'){
-                restart();
-            }
-        }
     }
 
     public void restart(){

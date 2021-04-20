@@ -1,34 +1,41 @@
 public class Cloud {
     
     private PVector position;
-    private float horizontal_velocity;
+    private float start_horizontal_velocity;
     private float z;
     private float slope;
     
+    private float horizontal_velocity;
     private float ratio;
     private PImage cloud_img;
     
-    public Cloud(PVector position, float horizontal_velocity, float z, float slope) {
+    private boolean is_paused;
+    
+    public Cloud(PVector position, float start_horizontal_velocity, float z, float slope) {
         this.position = position;
-        this.horizontal_velocity = horizontal_velocity;
+        this.start_horizontal_velocity = start_horizontal_velocity;
         this.z = z;
         this.slope = slope;
         init();
     }
     
     public void init() {
+        horizontal_velocity = start_horizontal_velocity;
         cloud_img = loadImage("../Images/cloud.png");
         ratio = 0.5f + z * slope;
+        is_paused = false;
     }
     
     public void update() {
         display();
-        move();
-        respawn();
+        if(is_paused == false){
+            move();
+            respawn();
+        }
     }
-    
-    public void stop(){
-        horizontal_velocity = 0;
+
+    public void pause(){
+        is_paused = is_paused == true ? false : true;
     }
     
     public void display() {

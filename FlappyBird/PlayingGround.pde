@@ -46,9 +46,7 @@ public class PlayingGround implements IComponent, IGround{
         return true;
     }
 
-    public void stop(){
-
-    }
+    public void pause(){}
     
     public void updateLocation() {
         horizontal_velocity = pipes.getHorizontalVelocity();

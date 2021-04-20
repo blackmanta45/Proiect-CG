@@ -16,6 +16,7 @@ public class Pipes implements IComponent{
     private float distance_between_pipes;
     private float pipe_width;
     private float horizontal_velocity;
+    private float distance_travelled;
     
     public Pipes(float start_horizontal_velocity, float max_horizontal_velocity, float increment_horizontal_velocity, float bird_width) {
         this.start_horizontal_velocity = start_horizontal_velocity;
@@ -27,6 +28,7 @@ public class Pipes implements IComponent{
     
     public void init() {
         horizontal_velocity = start_horizontal_velocity;
+        this.distance_travelled = 0;
         this.distance_between_pipes = displayWidth / 4;
         this.number_of_pipes = Math.round(width / distance_between_pipes) + 1;
         this.current_number_of_pipes = 0;
@@ -41,20 +43,14 @@ public class Pipes implements IComponent{
         tryToAddPipe();
         return true;
     }
-
-    public void stop(){
-        horizontal_velocity = 0;
-    }
-
-    public void restart(){
-        horizontal_velocity = start_horizontal_velocity;
+    
+    public void pause() {
+        horizontal_velocity = horizontal_velocity == 0 ? start_horizontal_velocity : 0;
     }
     
     public void updateAllPipes() {
-        // if (bird != null && bird.isDead() == true) {
-        //     horizontal_velocity = 0f;
-        // }
         float new_speed = horizontal_velocity * delta;
+        distance_travelled += new_speed;
         for (Pipe pipe : pipes_list) {
             pipe.updateSpeed(new_speed);
             pipe.update();
@@ -105,16 +101,17 @@ public class Pipes implements IComponent{
         }
     }
     
-    public boolean checkCollision(PVector bird_position) {
+    public Pipe findNextPipe() {
+        float bird_x_position = displayWidth * 25 / 100f;
         for (Pipe pipe : pipes_list) {
-            if (pipe.checkIndividualCollision(bird_position) == true) {
-                for (Pipe pipE : pipes_list) {
-                    pipE.updateSpeed(0f);
-                }
-                return true;
-            }
+            if (bird_x_position < pipe.getPosition().x + pipe.getPipeWidth())
+                return pipe;
         }
-        return false;
+        return null;
+    }
+    
+    public boolean checkCollision(PVector bird_position) {
+        return findNextPipe().checkIndividualCollision(bird_position);
     }
     
     public boolean isInAnyPipe(PVector bird_position) {
@@ -141,4 +138,8 @@ public class Pipes implements IComponent{
         return horizontal_velocity;
     }
 
+    public float getDistanceTravelled(){
+        return distance_travelled;
+    }
+    
 }

@@ -6,6 +6,9 @@ float deltaTime = 0;
 float previousTime = 0;
 float deltaDivider = 1.8e1;
 float delta;
+float last_click_time = 0;
+
+Matrix matrix = new Matrix(1,1);
 
 Scenes scenes;
 
@@ -15,9 +18,9 @@ void setup()
     smooth(8);
     frameRate(fps);
     surface.setTitle("Saggy Bird");
-
+    
     scenes = new Scenes();
-
+    
     previousTime = millis();
 }
 
@@ -31,7 +34,13 @@ void draw()
     background(#87CEFA);
 
     scenes.update();
-
+    
     textSize(50);
     text(frameRate + " fps", 20, 50);
+}
+
+void keyPressed(){
+    if (key == ESC) {
+        key = 0;
+    }
 }

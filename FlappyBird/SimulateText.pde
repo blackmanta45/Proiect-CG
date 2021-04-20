@@ -1,11 +1,14 @@
 public class SimulateText {
+    private Scenes scenes;
+
     private PVector position;
     private PVector top_left_corner;
     private PVector size;
     
     private String text;
     
-    public SimulateText() {
+    public SimulateText(Scenes scenes) {
+        this.scenes = scenes;
         init();
     }
     
@@ -23,8 +26,11 @@ public class SimulateText {
         else
             fill(0);
         text(text, position.x, position.y);
-        if (mousePressed == true && is_hovering == true)
+        if (mousePressed == true && is_hovering == true && millis() - last_click_time > 500){
+            last_click_time = millis();
+            scenes.setScene("simulate_scene");
             return true;
+        }
         return false;
     }
     

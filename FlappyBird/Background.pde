@@ -28,7 +28,7 @@ public class Background implements IComponent{
         return true;
     }
 
-    public void stop(){
-        clouds.stop();
+    public void pause(){
+        clouds.pause();
     }
 }

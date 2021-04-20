@@ -27,7 +27,7 @@ public class Score implements IComponent{
         return true;
     }
 
-    public void stop(){}
+    public void pause(){}
 
     public void restart(){
         score = 0;

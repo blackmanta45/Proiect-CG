@@ -1,4 +1,4 @@
-public class QuitText {
+public class BackToMainMenuText {
     private Scenes scenes;
 
     private PVector position;
@@ -7,16 +7,16 @@ public class QuitText {
     
     private String text;
     
-    public QuitText(Scenes scenes) {
+    public BackToMainMenuText(Scenes scenes) {
         this.scenes = scenes;
         init();
     }
     
     public void init() {
-        position = new PVector(displayWidth / 2, displayHeight / 2 + 200);
-        top_left_corner = new PVector( -120, 165);
-        size = new PVector(240, 100);
-        text = "Quit";
+        position = new PVector(displayWidth / 2, displayHeight / 2);
+        top_left_corner = new PVector(- 450, - 35);
+        size = new PVector(900, 100);
+        text = "Back to Main Menu";
     }
     
     public boolean update() {
@@ -28,7 +28,7 @@ public class QuitText {
         text(text, position.x, position.y);
         if (mousePressed == true && is_hovering == true && millis() - last_click_time > 500){
             last_click_time = millis();
-            exit();
+            scenes.setScene("main_menu_scene");
             return true;
         }
         return false;

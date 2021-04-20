@@ -33,10 +33,10 @@ public class Clouds {
         }
     }
 
-    public void stop (){
+    public void pause(){
         for (ArrayList<Cloud> cloud_list_z : cloud_list) {
             for (Cloud cloud : cloud_list_z) {
-                cloud.stop();
+                cloud.pause();
             }
         }
     }

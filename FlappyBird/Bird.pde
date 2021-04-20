@@ -4,14 +4,15 @@ public class Bird implements IComponent{
     private float ground_height;
     private Pipes pipes;
     private boolean is_in_simulation;
-
+    private boolean is_displayed;
+    
     private PVector position;
     private PVector restart_text_position;
     
     private PImage img;
     
     private final float bird_width = displayHeight / 14.4f;
-    private final float ACCELERATION = .7f;
+    private final float ACCELERATION =.7f;
     
     private float vertical_velocity;
     private float max_vertical_velocity;
@@ -26,59 +27,62 @@ public class Bird implements IComponent{
     private boolean is_inside_pipe;
     private boolean is_in_pipe;
     private boolean was_in_pipe;
+    private boolean is_paused;
     
-    public Bird(PVector start_position, float ground_height, Pipes pipes, boolean is_in_simulation) {
+    public Bird(PVector start_position, float ground_height, Pipes pipes, boolean is_in_simulation, boolean is_displayed) {
         this.start_position = start_position;
         this.ground_height = ground_height;
         this.pipes = pipes;
         this.is_in_simulation = is_in_simulation;
+        this.is_displayed = is_displayed;
         init();
     }
     
     public void init() {
         position = new PVector(start_position.x, start_position.y);
-        print(start_position.y);
         img = loadImage("../Images/bird_default.png");
         vertical_velocity = 0f;
         jump_force = displayHeight / 50f;
         max_vertical_velocity = jump_force / 2.2;
         rotation_angle = 0f;
         trace = new Trace(.1f, this, pipes);
-        restart_text_position = new PVector(displayWidth/2 - 420, displayHeight - ground_height/2);
-
+        restart_text_position = new PVector(displayWidth / 2 - 420, displayHeight - ground_height / 2);
+        
         is_dead = false;
         is_jumping = false;
         is_inside_pipe = false;
         is_in_pipe = false;
         was_in_pipe = false;
+        is_paused = false;
     }
     
     public boolean update() {
-        traceUpdate();
-        display();
-        rotation();
-        fall();
-        jump();
-        checkCollision();
-        die();
+        if(is_in_simulation == false){
+            jump();
+            traceUpdate();
+        }
+        if (is_paused == false) {
+            fall();
+            checkCollision();
+            die();
+            rotation();
+        }
+        if (is_displayed == true) {
+            display();
+        }
         return !is_dead;
     }
     
-    public void stop(){}
-    
-    public void restart(){
-        is_dead = false;
-        position = start_position;
-        vertical_velocity = 0;
-        rotation_angle = 0;
+    public void pause() {
+        is_paused = is_paused == true ? false : true;
     }
-
+    
     public void die() {
-        if(is_dead == true && is_in_simulation == false){
-            fill(255);
-            textSize(100);
-            text("Press R to restart!", restart_text_position.x, restart_text_position.y);
-        }
+        // if(is_dead == true && is_in_simulation == false){
+        //     fill(255);
+        //     textSize(100);
+        //     text("Press R to restart!", restart_text_position.x, restart_text_position.y);
+       // }
     }
     
     public void traceUpdate() {
@@ -126,14 +130,19 @@ public class Bird implements IComponent{
         // if(keyPressed == true)
         //     vertical_velocity -= jump_force * delta;
         if (is_dead == false) {
-            if (keyPressed == true && key == ' ') {
-                if (is_jumping == false) {
-                    vertical_velocity -= jump_force;
-                    is_jumping = true;
+            if (is_in_simulation == true) {
+                vertical_velocity -= jump_force;
+                is_jumping = true;
+            } else {
+                if (keyPressed == true && key == ' ') {
+                    if (is_jumping == false) {
+                        vertical_velocity -= jump_force;
+                        is_jumping = true;
+                    }
                 }
-            }
-            else {
-                is_jumping = false;
+                else{
+                    is_jumping = false;
+                }
             }
         }
         if (position.y <= 0) {
