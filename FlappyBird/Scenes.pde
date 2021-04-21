@@ -20,24 +20,24 @@ public class Scenes {
     // private IScene customizePipeScene = new Scene();
     
     public Scenes() {
-        init();
-        initPlayScene();
-        initMainMenuScene();
-        initSimulateScene();
-    }
-
-    public void init(){
         horizontal_velocity = displayWidth / 420;
         max_horizontal_velocity = displayWidth / 310;
         increment_horizontal_velocity = displayWidth / 8500;
         myMap.put("play_scene", play_scene);
         myMap.put("main_menu_scene", main_menu_scene);
         myMap.put("simulate_scene", simulate_scene);
+        init();
+    }
+
+    public void init(){
+        initPlayScene();
+        initMainMenuScene();
+        initSimulateScene();
         current_scene = myMap.get("main_menu_scene");
     }
 
     private void initPlayScene(){
-        
+        println("InitPlayScene");
         Pipes pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity, displayHeight / 14.4f);
         PlayingGround ground = new PlayingGround(pipes);
         Bird bird = new Bird(new PVector(displayWidth * 25 / 100f, displayHeight / 2), ground.getHeight(), pipes, false, true);
@@ -54,6 +54,7 @@ public class Scenes {
     }
 
     private void initMainMenuScene(){
+        println("InitMainMenuScene");
         
         MenuGround ground = new MenuGround(horizontal_velocity);
         Background background = new Background(horizontal_velocity);
@@ -65,26 +66,29 @@ public class Scenes {
     }
 
     private void initSimulateScene(){
+        println("InitSimulateScene");
         Pipes pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity, displayHeight / 14.4f);
         PlayingGround ground = new PlayingGround(pipes);
         BirdsWithBrain birds_with_brain = new BirdsWithBrain(pipes, ground, 500);
         Score score = new Score(birds_with_brain.getBird(), pipes);
         Background background = new Background(horizontal_velocity);
-        PauseSimulateMenu pause_simulate_menu = new PauseSimulateMenu(this);
+        PauseSimulateMenu pause_simulate_menu = new PauseSimulateMenu(this, birds_with_brain);
         
         simulate_scene.addComponent(background);
         simulate_scene.addComponent(pipes);
-        simulate_scene.addComponent(score);
         simulate_scene.addComponent(ground);
         simulate_scene.addComponent(birds_with_brain);
+        simulate_scene.addComponent(score);
         simulate_scene.addComponent(pause_simulate_menu);
     }
 
     public void update(){
+        deltaDivider = 15;
         current_scene.update();
     }
 
     public void setScene(String scene_name){
+        // init();
         current_scene = myMap.get(scene_name);
         restartScene();
     }

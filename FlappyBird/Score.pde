@@ -1,5 +1,5 @@
 public class Score implements IComponent{
-    
+    private float time_since_restart;
     private int score;
     private Pipes pipes;
     private Bird bird;
@@ -19,6 +19,7 @@ public class Score implements IComponent{
         position = new PVector();
         position.x = displayWidth / 2 - textSize / 2;
         position.y = textSize;
+        time_since_restart = millis();
     }
     
     public boolean update() {
@@ -41,7 +42,7 @@ public class Score implements IComponent{
     }
     
     public void tryToIncrement() {
-        if (bird.checkIfPassed() == true) {
+        if (bird.checkIfPassed() == true && millis() - time_since_restart > 500) {
             score++;
             if (score % 5 == 0)
                 pipes.updatePipesSpeed();

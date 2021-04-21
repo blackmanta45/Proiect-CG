@@ -1,6 +1,7 @@
 public class PauseSimulateMenu implements IComponent{
     private float text_size;
     private Scenes scenes;
+    private BirdsWithBrain birds_with_brain;
 
     private RestartSimulationText restart_simulation_text;
     private BackToMainMenuText back_to_main_menu_text;
@@ -8,8 +9,9 @@ public class PauseSimulateMenu implements IComponent{
 
     private boolean is_paused;
 
-    public PauseSimulateMenu(Scenes scenes){
+    public PauseSimulateMenu(Scenes scenes, BirdsWithBrain birds_with_brain){
         this.scenes = scenes;
+        this.birds_with_brain = birds_with_brain;
         init();
     }
 
@@ -19,28 +21,20 @@ public class PauseSimulateMenu implements IComponent{
         back_to_main_menu_text = new BackToMainMenuText(scenes);
         quit_text = new QuitText(scenes);
         is_paused = false;
-        // texts.put(new PVector(displayWidth/2, displayHeight/2 - 200), "New Game");
-        // texts.put(new PVector(displayWidth/2, displayHeight/2), "Simulate");
-        // texts.put(new PVector(displayWidth/2, displayHeight/2 + 200), "Quit");
     }
 
     public boolean update(){
-        // pushMatrix();
-        // noFill();
-        // translate(displayWidth/2, displayHeight/2);
-        // stroke(#FFA500);
-        // rect(-300,-235, 600, 100);
-        // rect(-450,-35, 900, 100);
-        // rect(-120, 165, 240, 100);
-        // popMatrix();
-
-        
         if(is_paused == true){
             textAlign(CENTER, CENTER);
             textSize(text_size);
-            restart_simulation_text.update();
-            back_to_main_menu_text.update();
             quit_text.update();
+            if(restart_simulation_text.update() == true){
+                birds_with_brain.resetSimulation();
+                birds_with_brain.overwriteGenerationNumber(1);
+            }
+            if(back_to_main_menu_text.update() == true){
+                birds_with_brain.resetSimulation();
+            }
             textAlign(LEFT, LEFT);
         }
         fill(255);

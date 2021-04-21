@@ -4,7 +4,7 @@ import java.util.LinkedList;
 int fps = 1000;
 float deltaTime = 0;
 float previousTime = 0;
-float deltaDivider = 1.8e1;
+float deltaDivider = 1.5e1;
 float delta;
 float last_click_time = 0;
 

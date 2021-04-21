@@ -24,8 +24,8 @@ public class SimulateScene implements IScene{
     
     public void update() {
         pauseCondition();
-        for (IComponent component : components) {
-            if(component.update() == false){
+        for (int i = 0; i < components.size(); i++) {
+            if(components.get(i).update() == false){
                 restart();
             }
         }
@@ -44,16 +44,6 @@ public class SimulateScene implements IScene{
     public void pause(){
         for (IComponent component : components) {
             component.pause();
-        }
-    }
-
-    private void restartCondition(){
-        float current_key_time = millis();
-        if(keyPressed == true){
-            if(key == 'r' && current_key_time - time_of_last_key > 1000){
-                time_of_last_key = current_key_time;
-                restart();
-            }
         }
     }
 
