@@ -2,6 +2,7 @@ public class BirdWithBrain{
     private NeuralNetwork brain;
     private Bird bird;
     private Pipes pipes;
+    private boolean is_displayed;
     private PlayingGround ground;
 
     private ArrayList<Double> input;
@@ -12,19 +13,21 @@ public class BirdWithBrain{
     private double internal_score;
     private double fitness;
 
-    public BirdWithBrain(Pipes pipes, PlayingGround ground){
+    public BirdWithBrain(Pipes pipes, PlayingGround ground, boolean is_displayed){
         this.pipes = pipes;
         this.ground = ground;
+        this.is_displayed = is_displayed;
         internal_score = 0;
         brain = new NeuralNetwork(5,8,2);
         createBird();
     }
 
-    public BirdWithBrain(Pipes pipes, PlayingGround ground, NeuralNetwork brain){
+    public BirdWithBrain(Pipes pipes, PlayingGround ground, boolean is_displayed, NeuralNetwork brain){
         this.pipes = pipes;
         this.ground = ground;
-        internal_score = 0;
+        this.is_displayed = is_displayed;
         this.brain = brain.copy();
+        internal_score = 0;
         createBird();
     }
 
@@ -50,7 +53,7 @@ public class BirdWithBrain{
     }
 
     public void createBird(){
-        bird = new Bird(new PVector(displayWidth * 25 / 100f, displayHeight / 2), ground.getHeight(), pipes, true, true);
+        bird = new Bird(new PVector(displayWidth * 25 / 100f, displayHeight / 2), ground.getHeight(), pipes, true, is_displayed);
     }
     
     public void mutate(float value){

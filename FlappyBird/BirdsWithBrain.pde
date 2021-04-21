@@ -26,7 +26,7 @@ public class BirdsWithBrain implements IComponent{
     
     public void generateBirds() {
         for (int i = 0; i < number_of_birds;i++) {
-            alive_birds.add(new BirdWithBrain(pipes, ground));
+            alive_birds.add(new BirdWithBrain(pipes, ground, true));
         }
     }
     
@@ -78,7 +78,7 @@ public class BirdsWithBrain implements IComponent{
         }
         index--;
         BirdWithBrain parent = dead_birds.get(index);
-        BirdWithBrain child = new BirdWithBrain(pipes, ground, parent.getBrain());
+        BirdWithBrain child = new BirdWithBrain(pipes, ground, true, parent.getBrain());
         child.mutate(0.01);
         return child;
     }
