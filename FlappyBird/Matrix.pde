@@ -54,8 +54,8 @@ class Matrix {
         }
     }
     
-    public List<Double> toArray() {
-        List<Double> temp = new ArrayList<Double>();
+    public ArrayList<Double> toArray() {
+        ArrayList<Double> temp = new ArrayList<Double>();
         
         for (int i = 0;i < rows;i++) {
             for (int j = 0;j < cols;j++) {
@@ -99,7 +99,7 @@ class Matrix {
             for (int j = 0;j < temp.cols;j++) {
                 double sum = 0;
                 for (int k = 0;k < a.cols;k++) {
-                    sum += a.data.get(i).get(k) * b.data.get(k).get(j) + (double)random(-0.01,0.01);
+                    sum += a.data.get(i).get(k) * b.data.get(k).get(j);
                 }
                 temp.data.get(i).set(j, sum);
             }
@@ -122,11 +122,28 @@ class Matrix {
             }
         }
     }
+
+    public void mutate(Double rate){
+        for (int i = 0;i < rows;i++) {
+            for (int j = 0;j < cols;j++) {
+                double val = this.data.get(i).get(j);
+                this.data.get(i).set(j, calculateMutation(val, rate));
+            }
+        }
+    }
+
+    private Double calculateMutation(Double val, Double rate){
+        if (random(1) < rate){
+            return val + randomGaussian() * .1;
+        } else{
+            return val;
+        }
+    }
     
     public void sigmoid() {
         for (int i = 0;i < rows;i++) {
             for (int j = 0;j < cols;j++)
-                this.data.get(i).set(j, 1 / (1 + Math.exp( - this.data.get(i).get(j)))); 
+                this.data.get(i).set(j, 1.0 / (1 + Math.exp( - this.data.get(i).get(j)))); 
         }
     }
     

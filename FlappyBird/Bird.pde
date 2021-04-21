@@ -147,6 +147,8 @@ public class Bird implements IComponent{
         }
         if (position.y <= 0) {
             position.y = 0; 
+            if(is_in_simulation == true)
+                is_dead = true;
         }
     }
     
@@ -176,5 +178,9 @@ public class Bird implements IComponent{
     
     public float getBirdWidth() {
         return bird_width;
+    }
+
+    public float getVerticalVelocity(){
+        return vertical_velocity;
     }
 }

@@ -67,7 +67,7 @@ public class Scenes {
     private void initSimulateScene(){
         Pipes pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity, displayHeight / 14.4f);
         PlayingGround ground = new PlayingGround(pipes);
-        BirdsWithBrain birds_with_brain = new BirdsWithBrain(pipes, ground, 50);
+        BirdsWithBrain birds_with_brain = new BirdsWithBrain(pipes, ground, 500);
         Score score = new Score(birds_with_brain.getBird(), pipes);
         Background background = new Background(horizontal_velocity);
         PauseSimulateMenu pause_simulate_menu = new PauseSimulateMenu(this);

@@ -19,7 +19,7 @@ public class NeuralNetwork
 		bias_o = new Matrix(to_copy.bias_o);
 	}
     
-    public List<Double> predict(ArrayList<Double> x_matrix) {
+    public ArrayList<Double> predict(ArrayList<Double> x_matrix) {
         Matrix input = matrix.fromArray(x_matrix);
         Matrix hidden = matrix.multiply(weights_ih, input);
         hidden.add(bias_h);
@@ -75,5 +75,16 @@ public class NeuralNetwork
         
         weights_ih.add(wih_delta);
         bias_h.add(h_gradient);
+    }
+
+    public NeuralNetwork copy(){
+        return new NeuralNetwork(this);
+    }
+
+    public void mutate(double val){
+        this.weights_ho.mutate(val);
+        this.weights_ih.mutate(val);
+        this.bias_h.mutate(val);
+        this.bias_o.mutate(val);
     }
 }
