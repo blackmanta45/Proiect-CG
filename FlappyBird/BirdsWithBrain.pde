@@ -23,7 +23,6 @@ public class BirdsWithBrain implements IComponent{
     
     public void init() {
         nextGeneration();
-        // print(" MAX SCORE :" + max_score);
     }
     
     public void generateBirds() {
@@ -51,10 +50,8 @@ public class BirdsWithBrain implements IComponent{
         for(BirdWithBrain bird : deleted_birds){
             sum += (double)bird.getInternalScore();
         }
-        // println(sum);
         for(BirdWithBrain bird : deleted_birds){
             bird.setFitness(bird.getInternalScore() / sum);
-            // println((double)bird.getFitness());
         }
     }
 
@@ -79,10 +76,9 @@ public class BirdsWithBrain implements IComponent{
             index++;
         }
         index--;
-        println(index);
         BirdWithBrain parent = deleted_birds.get(index);
         BirdWithBrain child = new BirdWithBrain(pipes, ground, parent.getBrain());
-        child.mutate(0.1);
+        child.mutate(0.01);
         return child;
     }
 

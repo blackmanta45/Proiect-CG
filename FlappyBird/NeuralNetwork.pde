@@ -1,90 +1,176 @@
-public class NeuralNetwork
-{
-    public Matrix weights_ih, weights_ho, bias_h, bias_o;
-    public double l_rate = 0.01;
+class NeuralNetwork{
+    public int inputNodes;
+    public int hiddenNodes; 
+    public int outputNodes;
     
-    public NeuralNetwork(int i, int h, int o) {
-        weights_ih = new Matrix(h, i);
-        weights_ho = new Matrix(o, h);
-        
-        bias_h = new Matrix(h, 1);
-        bias_o = new Matrix(o, 1);
-    }
-
-	public NeuralNetwork(NeuralNetwork to_copy){
-		weights_ho = new Matrix(to_copy.weights_ho);
-		weights_ih = new Matrix(to_copy.weights_ih);
-
-		bias_h = new Matrix(to_copy.bias_h);
-		bias_o = new Matrix(to_copy.bias_o);
-	}
+    public float LearningRate =.1;
     
-    public ArrayList<Double> predict(ArrayList<Double> x_matrix) {
-        Matrix input = matrix.fromArray(x_matrix);
-        Matrix hidden = matrix.multiply(weights_ih, input);
-        hidden.add(bias_h);
-        hidden.sigmoid();
+    public Matrix IHWeights;
+    public Matrix HOWeights;
+    public Matrix Hbias;
+    public Matrix Obias;
+    public Matrix input;
+    public Matrix hidden;
+    public Matrix output;
+    
+    public NeuralNetwork(NeuralNetwork copy) {
+        inputNodes = copy.inputNodes;
+        hiddenNodes = copy.hiddenNodes;
+        outputNodes = copy.outputNodes;
         
-        Matrix output = matrix.multiply(weights_ho, hidden);
-        output.add(bias_o);
-        output.sigmoid();
-        
-        return output.toArray();
+        IHWeights = copy.IHWeights.copy();
+        HOWeights = copy.HOWeights.copy();
+        Hbias = copy.Hbias.copy();
+        Obias = copy.Obias.copy();
     }
     
+    public NeuralNetwork(int input, int hidden, int output) {
+        inputNodes = input;
+        hiddenNodes = hidden;
+        outputNodes = output;
+        
+        IHWeights = Matrix.random(hiddenNodes, inputNodes);
+        HOWeights = Matrix.random(outputNodes, hiddenNodes);
+        Hbias = Matrix.random(hiddenNodes, 1);
+        Obias = Matrix.random(outputNodes, 1);
+    }
     
-    public void fit(ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix, int epochs) {
-        for (int i = 0; i < epochs; i++) {
-            int sampleN = (int)(Math.random() * x_matrix.size());
-            this.train(x_matrix.get(sampleN), y_matrix.get(sampleN));
+    public NeuralNetwork(int input, int hidden, int output, float lr) {
+        this(input, hidden, output);
+        setLearingRate(lr);
+    }
+    
+    public NeuralNetwork copy() {
+        return new NeuralNetwork(this);
+    }
+    
+    
+    public float mut(float val, float rate) {
+        if (random(1) < rate) {
+            return val + randomGaussian() *.1;
+        } else{
+            return val;
         }
     }
     
-    public void train(ArrayList<Double> x_matrix, ArrayList<Double> y_matrix) {
-        Matrix input = matrix.fromArray(x_matrix);
-        Matrix hidden = matrix.multiply(weights_ih, input);
-        hidden.add(bias_h);
-        hidden.sigmoid();
+    public void mutate(float rate) {
+        for (int i = 0; i < IHWeights.rows; i++) {
+            for (int j = 0; j < IHWeights.cols; j++) {
+                float val = IHWeights.values[i][j];
+                IHWeights.values[i][j] = mut(val, rate);
+            }
+        }
         
-        Matrix output = matrix.multiply(weights_ho, hidden);
-        output.add(bias_o);
-        output.sigmoid();
+        for (int i = 0; i < HOWeights.rows; i++) {
+            for (int j = 0; j < HOWeights.cols; j++) {
+                float val = HOWeights.values[i][j];
+                HOWeights.values[i][j] = mut(val, rate);
+            }
+        }
         
-        Matrix target = matrix.fromArray(y_matrix);
+        for (int i = 0; i < Hbias.rows; i++) {
+            for (int j = 0; j < Hbias.cols; j++) {
+                float val = Hbias.values[i][j];
+                Hbias.values[i][j] = mut(val, rate);
+            }
+        }
         
-        Matrix error = matrix.subtract(target, output);
-        Matrix gradient = output.dsigmoid();
-        gradient.multiply(error);
-        gradient.multiply(l_rate);
+        for (int i = 0; i < Obias.rows; i++) {
+            for (int j = 0; j < Obias.cols; j++) {
+                float val = Obias.values[i][j];
+                Obias.values[i][j] = mut(val, rate);
+            }
+        }
+    }
+    
+    public void setLearingRate(float rate) {
+        LearningRate = rate;
+    }
+    
+    public float[] feedForward(float[] inputArray) {
+        input = Matrix.FromArray(inputArray);
         
-        Matrix hidden_T = matrix.transpose(hidden);
-        Matrix who_delta = matrix.multiply(gradient, hidden_T);
+        //generating hidden inputs
+        hidden = Matrix.Product(IHWeights, input);
+        hidden.add(Hbias);
         
-        weights_ho.add(who_delta);
-        bias_o.add(gradient);
+        //activation function for hidden nodes!
+        for (int i = 0; i < hidden.rows; i++) {
+            for (int j = 0; j < hidden.cols; j++) {
+                float val = hidden.values[i][j];
+                hidden.values[i][j] = sigmoid(val);
+            }
+        }
         
-        Matrix who_T = matrix.transpose(weights_ho);
-        Matrix hidden_errors = matrix.multiply(who_T, error);
+        //generating hidden output
+        output = Matrix.Product(HOWeights, hidden);
+        output.add(Obias);
         
-        Matrix h_gradient = hidden.dsigmoid();
-        h_gradient.multiply(hidden_errors);
-        h_gradient.multiply(l_rate);
+        //activation function for ouput nodes!
+        for (int i = 0; i < output.rows; i++) {
+            for (int j = 0; j < output.cols; j++) {
+                float val = output.values[i][j];
+                output.values[i][j] = sigmoid(val);
+            }
+        }
         
-        Matrix i_T = matrix.transpose(input);
-        Matrix wih_delta = matrix.multiply(h_gradient, i_T);
+        //generating the output array
+        return output.toArray();
+    }
+    
+    public void train(float[] inputArray, float[] targetArray) {
+        feedForward(inputArray);
         
-        weights_ih.add(wih_delta);
-        bias_h.add(h_gradient);
+        Matrix targets = Matrix.FromArray(targetArray);
+        Matrix outputErrors = Matrix.subtract(targets, output);
+        
+        //java version of matrix map function
+        Matrix gradient = output.copy();
+        for (int i = 0; i < gradient.rows; i++) {
+            for (int j = 0; j < gradient.cols; j++) {
+                float val = gradient.values[i][j];
+                gradient.values[i][j] = dsigmoid(val);
+            }
+        }
+        
+        gradient.multiply(outputErrors);  //elementWise
+        gradient.multiply(LearningRate);  //Scalar
+        
+        Matrix hiddenT = Matrix.transpose(hidden);
+        Matrix DHOWeights = Matrix.Product(gradient, hiddenT);
+        
+        HOWeights.add(DHOWeights);
+        
+        Obias.add(gradient);
+        
+        Matrix HOWeightsT = Matrix.transpose(HOWeights);
+        Matrix hiddenErrors = Matrix.Product(HOWeightsT, outputErrors);
+        
+        //java version of matrix map function
+        Matrix hiddenGradient = hidden.copy();
+        for (int i = 0; i < hiddenGradient.rows; i++) {
+            for (int j = 0; j < hiddenGradient.cols; j++) {
+                float val = hiddenGradient.values[i][j];
+                hiddenGradient.values[i][j] = dsigmoid(val);
+            }
+        }
+        
+        hiddenGradient.multiply(hiddenErrors);
+        hiddenGradient.multiply(LearningRate);
+        
+        Matrix inputT = Matrix.transpose(input);
+        Matrix DIHWeights = Matrix.Product(hiddenGradient, inputT);
+        
+        IHWeights.add(DIHWeights);
+        
+        Hbias.add(hiddenGradient);
     }
 
-    public NeuralNetwork copy(){
-        return new NeuralNetwork(this);
+    public float sigmoid(float x) {
+        return 1 / (1 + (float)Math.exp( - x));
     }
 
-    public void mutate(double val){
-        this.weights_ho.mutate(val);
-        this.weights_ih.mutate(val);
-        this.bias_h.mutate(val);
-        this.bias_o.mutate(val);
+    public float dsigmoid(float y) {
+        return y * (1 - y);
     }
 }
