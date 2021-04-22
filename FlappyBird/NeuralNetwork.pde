@@ -124,7 +124,6 @@ class NeuralNetwork{
         Matrix targets = Matrix.FromArray(targetArray);
         Matrix outputErrors = Matrix.subtract(targets, output);
         
-        //java version of matrix map function
         Matrix gradient = output.copy();
         for (int i = 0; i < gradient.rows; i++) {
             for (int j = 0; j < gradient.cols; j++) {
@@ -146,7 +145,6 @@ class NeuralNetwork{
         Matrix HOWeightsT = Matrix.transpose(HOWeights);
         Matrix hiddenErrors = Matrix.Product(HOWeightsT, outputErrors);
         
-        //java version of matrix map function
         Matrix hiddenGradient = hidden.copy();
         for (int i = 0; i < hiddenGradient.rows; i++) {
             for (int j = 0; j < hiddenGradient.cols; j++) {

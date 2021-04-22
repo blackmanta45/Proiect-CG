@@ -5,7 +5,6 @@ public class MainMenuScene implements IScene{
     private Scenes scenes;
 
     private List<IComponent> components;
-    private boolean continueUpdate = true;
     
     public MainMenuScene(Scenes scenes) {
         this.scenes = scenes;
@@ -26,13 +25,9 @@ public class MainMenuScene implements IScene{
         }
     }
 
-    private void restartCondition(){
-    }
-
     public void restart(){
         for (IComponent component : components) {
             component.init();
         }
-        continueUpdate = true;
     }
 }

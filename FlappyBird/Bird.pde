@@ -64,7 +64,6 @@ public class Bird implements IComponent{
         if (is_paused == false) {
             fall();
             checkCollision();
-            die();
             rotation();
         }
         if (is_displayed == true) {
@@ -75,14 +74,6 @@ public class Bird implements IComponent{
     
     public void pause() {
         is_paused = is_paused == true ? false : true;
-    }
-    
-    public void die() {
-        // if(is_dead == true && is_in_simulation == false){
-        //     fill(255);
-        //     textSize(100);
-        //     text("Press R to restart!", restart_text_position.x, restart_text_position.y);
-       // }
     }
     
     public void traceUpdate() {
@@ -127,8 +118,6 @@ public class Bird implements IComponent{
     }
     
     public void jump() {
-        // if(keyPressed == true)
-        //     vertical_velocity -= jump_force * delta;
         if (is_dead == false) {
             if (is_in_simulation == true) {
                 vertical_velocity -= jump_force;

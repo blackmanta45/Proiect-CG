@@ -13,11 +13,6 @@ public class Scenes {
     private IScene simulate_scene = new SimulateScene(this);
 
     private IScene current_scene;
-    // private IScene diedScene = new Scene();
-    // private IScene settingsScene = new Scene();
-    // private IScene customizeMenuScene = new Scene();
-    // private IScene customizeBirdScene = new Scene();
-    // private IScene customizePipeScene = new Scene();
     
     public Scenes() {
         horizontal_velocity = displayWidth / 420;
@@ -37,7 +32,6 @@ public class Scenes {
     }
 
     private void initPlayScene(){
-        println("InitPlayScene");
         Pipes pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity, displayHeight / 14.4f);
         PlayingGround ground = new PlayingGround(pipes);
         Bird bird = new Bird(new PVector(displayWidth * 25 / 100f, displayHeight / 2), ground.getHeight(), pipes, false, true);
@@ -54,7 +48,6 @@ public class Scenes {
     }
 
     private void initMainMenuScene(){
-        println("InitMainMenuScene");
         
         MenuGround ground = new MenuGround(horizontal_velocity);
         Background background = new Background(horizontal_velocity);
@@ -66,10 +59,9 @@ public class Scenes {
     }
 
     private void initSimulateScene(){
-        println("InitSimulateScene");
         Pipes pipes = new Pipes(horizontal_velocity, max_horizontal_velocity, increment_horizontal_velocity, displayHeight / 14.4f);
         PlayingGround ground = new PlayingGround(pipes);
-        BirdsWithBrain birds_with_brain = new BirdsWithBrain(pipes, ground, 100);
+        BirdsWithBrain birds_with_brain = new BirdsWithBrain(pipes, ground, number_of_birds_in_simulation);//number_of_birds_in_simulation can be changed in FlappyBird.pde
         Score score = new Score(birds_with_brain.getBird(), pipes);
         Background background = new Background(horizontal_velocity);
         PauseSimulateMenu pause_simulate_menu = new PauseSimulateMenu(this, birds_with_brain);
@@ -88,7 +80,6 @@ public class Scenes {
     }
 
     public void setScene(String scene_name){
-        // init();
         current_scene = myMap.get(scene_name);
         restartScene();
     }

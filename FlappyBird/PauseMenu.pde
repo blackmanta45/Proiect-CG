@@ -18,22 +18,9 @@ public class PauseMenu implements IComponent{
         back_to_main_menu_text = new BackToMainMenuText(scenes);
         quit_text = new QuitText(scenes);
         is_paused = false;
-        // texts.put(new PVector(displayWidth/2, displayHeight/2 - 200), "New Game");
-        // texts.put(new PVector(displayWidth/2, displayHeight/2), "Simulate");
-        // texts.put(new PVector(displayWidth/2, displayHeight/2 + 200), "Quit");
     }
 
     public boolean update(){
-        // pushMatrix();
-        // noFill();
-        // translate(displayWidth/2, displayHeight/2);
-        // stroke(#FFA500);
-        // rect(-300,-235, 600, 100);
-        // rect(-450,-35, 900, 100);
-        // rect(-120, 165, 240, 100);
-        // popMatrix();
-
-        
         if(is_paused == true){
             textAlign(CENTER, CENTER);
             textSize(text_size);
@@ -46,11 +33,7 @@ public class PauseMenu implements IComponent{
         return true;
     }
 
-    public void stop(){}
-
     public void pause(){
         is_paused = is_paused == true ? false : true;
     }
-
-    public void resume(){}
 }

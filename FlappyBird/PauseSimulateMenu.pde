@@ -41,11 +41,7 @@ public class PauseSimulateMenu implements IComponent{
         return true;
     }
 
-    public void stop(){}
-
     public void pause(){
         is_paused = is_paused == true ? false : true;
     }
-
-    public void resume(){}
 }

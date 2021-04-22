@@ -1,4 +1,4 @@
-class Matrix{
+public class Matrix{
   int rows, cols;
   float[][] values;
 

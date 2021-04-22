@@ -8,7 +8,7 @@ float deltaDivider = 1.5e1;
 float delta;
 float last_click_time = 0;
 
-Matrix matrix = new Matrix(1,1);
+int number_of_birds_in_simulation = 400;
 
 Scenes scenes;
 

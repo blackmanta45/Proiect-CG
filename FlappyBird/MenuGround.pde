@@ -46,11 +46,7 @@ public class MenuGround implements IComponent, IGround{
         return true;
     }
 
-    public void stop(){}
-
     public void pause(){}
-
-    public void resume(){}
     
     public void updateLocation() {
         float new_horizontal_velocity = horizontal_velocity * delta;

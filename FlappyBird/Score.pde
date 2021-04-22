@@ -29,10 +29,6 @@ public class Score implements IComponent{
     }
 
     public void pause(){}
-
-    public void restart(){
-        score = 0;
-    }
     
     public void displayScore() {
         fill(255);
