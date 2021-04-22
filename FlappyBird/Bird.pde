@@ -11,7 +11,7 @@ public class Bird implements IComponent{
     
     private PImage img;
     
-    private final float bird_width = displayHeight / 14.4f;
+    private final float bird_width = displayWidth / 30;
     private final float ACCELERATION =.7f;
     
     private float vertical_velocity;

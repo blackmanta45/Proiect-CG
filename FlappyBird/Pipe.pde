@@ -28,7 +28,7 @@ public class Pipe {
         hole_position = new PVector();
         top_part = loadImage("../Images/pipe_default.png");
         bottom_part = loadImage("../Images/pipe_default.png");
-        hole_size = random(displayHeight / 4.2f, displayHeight / 3.75f);
+        hole_size = random(displayHeight / 4.6f, displayHeight / 4f);
         hole_position.y = random(100, displayHeight - hole_size - displayHeight / 5.1);
         is_paused = false;
     }

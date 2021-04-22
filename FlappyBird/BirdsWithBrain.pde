@@ -79,7 +79,7 @@ public class BirdsWithBrain implements IComponent{
         index--;
         BirdWithBrain parent = dead_birds.get(index);
         BirdWithBrain child = new BirdWithBrain(pipes, ground, true, parent.getBrain());
-        child.mutate(0.01);
+        child.mutate(0.025);
         return child;
     }
 
